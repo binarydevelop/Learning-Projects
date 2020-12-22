@@ -1,2 +1,2 @@
 # Learning-Projects
-Series of Projects that will be done while learnign Javascript and other Frameworks
+Series of Projects that will be done while learning JavaScript and other Frameworks(ReactJs & NodeJs).
