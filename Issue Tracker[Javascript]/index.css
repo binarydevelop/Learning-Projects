@@ -3,5 +3,7 @@
 }
 body{
     background-color: rgb(0, 0, 0);
-    background-image: url("Assets/images/55.jpg");\
+    background-position: center center;
+    background-image: url("Assets/images/55.jpg");
+    background-size:  cover;
 }
