@@ -1,17 +1,14 @@
 #Heading{
    
-   color:whitesmoke
+   color:#ca961a;
 }
 body{
     background-color: rgb(0, 0, 0);
     background-position: center center;
-    background-image: url("Assets/images/66.png");
+    background-image: url("Assets/images/bg.jpg");
     background-size:  cover;
 }
 .container{
     padding-top: 90px;
-    border-bottom: 4px solid rgb(0, 0, 0);
-    border-right:4px solid black;
-    border-left:4px solid black;
-    border-radius: 20px;
+   
 }
