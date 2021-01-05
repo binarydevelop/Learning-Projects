@@ -24,12 +24,26 @@ body{
     font-family: 'Courier New', Courier, monospace;
 }
 #result {
-margin-left: 6%;
+margin-left: 18%;
 display: inline-block;
 box-shadow: 0 4px 8px 0 rgba(0,0,0,1.0);
 transition: 0.3s;
+float: left;
 }
 
 #result :hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,7.0);
+    border-radius: 9px;
+}
+
+#others{
+    display :inline;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,1.0);
+    transition: 0.3s;
+    font-weight: 400;
+    font-family: 'consolas';
+    border-radius: 5px;
+    font-size: 19px;
+    color:white;
+    
 }

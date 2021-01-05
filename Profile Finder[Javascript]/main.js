@@ -14,6 +14,16 @@ form.addEventListener('submit',function(e){
       console.log(data);
       
       document.getElementById('result').innerHTML = ` 
-                      <a target="_blank" href="https://www.github.com/${originalName}">  <img style="width="200px"; height="250px" " src="${data.avatar_url}" /> </a>
-      `    })
+                     <a target="_blank" href="https://www.github.com/${originalName}">  <img style="width="200px"; height="250px" " src="${data.avatar_url}" /> </a>
+                      `    
+      document.getElementById('otherinfo').innerHTML = `
+                      <div id ="others" > Name : ${data.name} <br>
+                      Repositories : ${data.public_repos} <br> Followers : ${data.followers} &nbsp &nbsp Following : ${data.following} <br> 
+                                        Company : ${data.company}  <br>  Location : ${data.location} <br> 
+                                        Id : ${data.id}   Twitter : ${data.twitter_username}    
+                        
+                      </div>
+       `
+                    })
+      
 })
