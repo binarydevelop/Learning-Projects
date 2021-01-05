@@ -14,6 +14,6 @@ form.addEventListener('submit',function(e){
       console.log(data);
       
       document.getElementById('result').innerHTML = ` 
-                      <a target="_blank" href="https://www.github.com/${originalName}">  <img src="${data.avatar_url}" /> </a>
+                      <a target="_blank" href="https://www.github.com/${originalName}">  <img style="width="200px"; height="250px" " src="${data.avatar_url}" /> </a>
       `    })
 })
