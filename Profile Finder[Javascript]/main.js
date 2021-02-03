@@ -5,7 +5,7 @@ form.addEventListener('submit',function(e){
 
     var search = document.getElementById('search').value;
     console.log(search);
- 
+
     var originalName= search.split(' ').join(''); //To remove spaces
 
     fetch("https://api.github.com/users/"+ originalName)
