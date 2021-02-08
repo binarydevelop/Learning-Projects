@@ -7,9 +7,8 @@ const app = express();
 
 // Importing the class from the location of the file 
 import { crud } from "./functions"; 
-let func_use = new crud('TEST.txt',"Hello World");
+let func_use = new crud();
 func_use.create("test.txt","Hello World");
-
 
 
 app.get('/',(req,res)=>{
