@@ -5,10 +5,8 @@ export class crud{
      private texttowrite:string;
         private newname:string;
 
-    constructor(fname:string,texttowrite:string){
-        this.fname=fname;
-        this.texttowrite=texttowrite;
-    }
+   
+    
 
     create(filename,text){
       fs.writeFileSync(filename,text);
