@@ -7,7 +7,7 @@ var component = /** @class */ (function () {
         this.m_name = name;
         this.m_role = role;
     }
-    //create Entity
+    //create Entity[Admin]
     component.prototype.createEntity = function (title, catgory) {
         if (this.m_role == "Admin") {
             var obj = { "title": title,
@@ -18,11 +18,17 @@ var component = /** @class */ (function () {
             console.log("You need to be an Admin to create Entity.");
         }
     };
-    //Delete Entity
+    //Delete Entity[Admin]
     component.prototype.delteEntity = function (title) {
         if (this.m_role == "Admin") {
             var to_delete = this.Entites.indexOf({ title: "Title" }, 0);
             this.Entites.splice(to_delete, 1);
+        }
+    };
+    //view all Entites[Admin]
+    component.prototype.viewall = function () {
+        for (var i = 0; i < this.Entites.length; i++) {
+            console.log(this.Entites[i]);
         }
     };
     return component;

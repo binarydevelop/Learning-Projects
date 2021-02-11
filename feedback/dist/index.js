@@ -5,6 +5,4 @@ var c1 = new functions_1.component("Test", "Admin");
 c1.createEntity("Title", "Person");
 c1.createEntity("Title", "Technology");
 c1.createEntity("Title", "Technology");
-c1.delteEntity("Title");
-c1.delteEntity("Title");
-console.log(c1);
+c1.viewall();
