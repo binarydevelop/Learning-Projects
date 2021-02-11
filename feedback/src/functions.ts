@@ -26,12 +26,13 @@ export class component{
             feedbacks:[]=[]
         }
         component.Entites.push(temp);
+        }else{
+            throw('Error Occured. Make sure you are an Admin.')
         }
     }          
         //deleteEntity[Admin]
     deleteEntity(titlename:string){
         if(this.m_role==="Admin"){
-            let todelete:number;
      for(let i=0;i<component.Entites.length;i++){
          if(component.Entites[i].title==titlename){
             component.Entites.splice(i,1);    
@@ -42,13 +43,14 @@ export class component{
         }        
    }
     //viewAll Entity[Admin]
-  viewall(){
+    viewall(){
       if(this.m_role==="Admin"){   
       for(let i=0;i<component.Entites.length;i++){
         console.log(component.Entites[i]);
     }
   }
-}
+   }
+
     //accessSpecific[Admin]
    accessSpecific(titlename:string){
        for(let i=0;i<component.Entites.length;i++){console.log(component.Entites.length);
@@ -57,14 +59,23 @@ export class component{
            }
        }
    }
+   
+   //remove feedback
+   removefeedback(){}
      
                                                 /* USER */
-    //Writefeedback
+    //Writefeedback with username
     writefeedback(titlename:string,text:string){
-        for(let i=0;i<component.Entites.length;i++){console.log('Here');
+        for(let i=0;i<component.Entites.length;i++){
             if(component.Entites[i].title==titlename){
-                component.Entites[i].feedbacks.push(text);
+                let username=this.m_name;
+                console.log(username);
+                component.Entites[i].feedbacks.push(text,username);
             }
         }
     }
+    
+    //editFeedBack
+   
+
 }

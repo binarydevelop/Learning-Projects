@@ -16,11 +16,13 @@ var component = /** @class */ (function () {
             };
             component.Entites.push(temp);
         }
+        else {
+            throw ('Error Occured. Make sure you are an Admin.');
+        }
     };
     //deleteEntity[Admin]
     component.prototype.deleteEntity = function (titlename) {
         if (this.m_role === "Admin") {
-            var todelete = void 0;
             for (var i = 0; i < component.Entites.length; i++) {
                 if (component.Entites[i].title == titlename) {
                     component.Entites.splice(i, 1);
@@ -48,13 +50,27 @@ var component = /** @class */ (function () {
             }
         }
     };
+    //remove feedback
+    component.prototype.removefeedback = function () { };
     /* USER */
-    //Writefeedback
+    //Writefeedback with username
     component.prototype.writefeedback = function (titlename, text) {
         for (var i = 0; i < component.Entites.length; i++) {
-            console.log('Here');
             if (component.Entites[i].title == titlename) {
-                component.Entites[i].feedbacks.push(text);
+                var username = this.m_name;
+                console.log(username);
+                component.Entites[i].feedbacks.push(text, username);
+            }
+        }
+    };
+    //editFeedBack
+    component.prototype.editfeedBack = function (entityTitleName, texttoappend) {
+        for (var i = 0; i < component.Entites.length; i++) {
+            for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
+                if (component.Entites[i].title == entityTitleName &&
+                    component.Entites[i].feedbacks[j] == this.m_name) {
+                    component.Entites[i].feedbacks[j - 1].concat(texttoappend);
+                }
             }
         }
     };
