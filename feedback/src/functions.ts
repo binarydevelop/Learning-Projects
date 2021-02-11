@@ -12,7 +12,7 @@ export class component{
         
     }
 
-    //create Entity
+    //create Entity[Admin]
     createEntity(title:string,catgory:category){
         if(this.m_role=="Admin"){
           var obj ={"title":title,
@@ -23,14 +23,21 @@ export class component{
         }
     }
 
-    //Delete Entity
+    //Delete Entity[Admin]
     delteEntity(title:string){
     if(this.m_role=="Admin"){
         const to_delete= this.Entites.indexOf({title:"Title"},0)
         this.Entites.splice(to_delete,1);
     }
 }
+    //view all Entites[Admin]
+    viewall(){
+        for(let i=0;i<this.Entites.length;i++){
+            console.log(this.Entites[i]);
+        }
+    }
 
+    
 
     
 }
