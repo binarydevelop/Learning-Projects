@@ -2,7 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var functions_1 = require("./functions");
 var c1 = new functions_1.component("Test", "Admin");
-c1.createEntity("Title", "Person");
 c1.createEntity("Title", "Technology");
-c1.createEntity("Title", "Technology");
-c1.viewall();
+c1.createEntity("t2", "Technology");
+var u1 = new functions_1.component("Tets", "User");
+//console.log(c1);
+//c1.accessSpecific("Title");
+u1.writefeedback("Title", "is This is working");
+c1.accessSpecific("Title");
+//c1.accessSpecific("Title");
