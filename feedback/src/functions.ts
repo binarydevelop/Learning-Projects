@@ -24,6 +24,13 @@ export class component{
     }
 
     //Delete Entity
+    delteEntity(title:string){
+    if(this.m_role=="Admin"){
+        const to_delete= this.Entites.indexOf({title:"Title"},0)
+        this.Entites.splice(to_delete,1);
+    }
+}
+
 
     
 }

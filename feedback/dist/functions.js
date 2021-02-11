@@ -18,6 +18,13 @@ var component = /** @class */ (function () {
             console.log("You need to be an Admin to create Entity.");
         }
     };
+    //Delete Entity
+    component.prototype.delteEntity = function (title) {
+        if (this.m_role == "Admin") {
+            var to_delete = this.Entites.indexOf({ title: "Title" }, 0);
+            this.Entites.splice(to_delete, 1);
+        }
+    };
     return component;
 }());
 exports.component = component;
