@@ -124,4 +124,18 @@ export class component{
     }
   }
 
+
+                                /* SORTING AND FILTERING[ADMIN & USER] */
+
+sort(){
+
+}
+
+filterby(categoryname:category){
+    for(let i=0;i<component.Entites.length;i++){
+        if(component.Entites[i].category==categoryname){
+            console.log(component.Entites[i]);
+        }
+    }
+}
 }

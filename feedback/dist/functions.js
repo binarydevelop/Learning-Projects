@@ -113,6 +113,16 @@ var component = /** @class */ (function () {
             break;
         }
     };
+    /* SORTING AND FILTERING[ADMIN & USER] */
+    component.prototype.sort = function () {
+    };
+    component.prototype.filterby = function (categoryname) {
+        for (var i = 0; i < component.Entites.length; i++) {
+            if (component.Entites[i].category == categoryname) {
+                console.log(component.Entites[i]);
+            }
+        }
+    };
     component.Entites = [];
     return component;
 }());
