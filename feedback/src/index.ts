@@ -15,6 +15,6 @@ u1.writefeedback("t2","Added");
 u1.edityourfeedbacks("Hello there is working????");
 
 c1.approveaspecific("is  working");
-c1.removefeedback("is  working");
+u1.viewyourfeedbacks();
 c1.filterby("Person");
 

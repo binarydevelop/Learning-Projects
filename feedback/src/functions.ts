@@ -105,7 +105,8 @@ export class component{
       for(let i=0;i<component.Entites.length;i++){
           for(let j=0;j<component.Entites[i].feedbacks.length;j++){
               if(component.Entites[i].feedbacks[j]==this.m_name){
-                  console.log(component.Entites[i].feedbacks[j-1].toUpperCase());
+                  console.log(component.Entites[i].feedbacks[j-1].toUpperCase() + " | Status : " +
+                              component.Entites[i].feedbacks[j+1]);
               }
           }
       }
@@ -126,10 +127,7 @@ export class component{
 
 
                                 /* SORTING AND FILTERING[ADMIN & USER] */
-
-sort(){
-
-}
+//sorting??
 
 filterby(categoryname:category){
     for(let i=0;i<component.Entites.length;i++){

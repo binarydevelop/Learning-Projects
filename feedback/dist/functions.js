@@ -96,7 +96,8 @@ var component = /** @class */ (function () {
         for (var i = 0; i < component.Entites.length; i++) {
             for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
                 if (component.Entites[i].feedbacks[j] == this.m_name) {
-                    console.log(component.Entites[i].feedbacks[j - 1].toUpperCase());
+                    console.log(component.Entites[i].feedbacks[j - 1].toUpperCase() + " | Status : " +
+                        component.Entites[i].feedbacks[j + 1]);
                 }
             }
         }
@@ -114,8 +115,7 @@ var component = /** @class */ (function () {
         }
     };
     /* SORTING AND FILTERING[ADMIN & USER] */
-    component.prototype.sort = function () {
-    };
+    //sorting??
     component.prototype.filterby = function (categoryname) {
         for (var i = 0; i < component.Entites.length; i++) {
             if (component.Entites[i].category == categoryname) {
