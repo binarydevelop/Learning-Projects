@@ -11,5 +11,4 @@ u1.writefeedback("t2", "This is also working");
 u1.writefeedback("t2", "Added");
 u1.edityourfeedbacks("Hello there is working????");
 c1.viewall();
-u1.viewyourfeedbacks();
 //c1.accessSpecific("Title");

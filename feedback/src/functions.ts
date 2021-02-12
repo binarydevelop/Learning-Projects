@@ -1,5 +1,4 @@
-import * as rl from 'readline';
-import { ExitStatus } from 'typescript';
+
 type roles = "Admin" | "User";
 type category = "Person" | "Technology";
 interface Entities {
@@ -25,7 +24,7 @@ export class component{
         let temp :Entities= {
             title :titlename,
             category: category,
-            feedbacks:[]=[]
+            feedbacks:[]=[],
         }
         component.Entites.push(temp);
         }else{
@@ -49,6 +48,7 @@ export class component{
       if(this.m_role==="Admin"){   
       for(let i=0;i<component.Entites.length;i++){
         console.log(component.Entites[i]);
+        console.log((component.Entites[i].feedbacks.length)/2 + " feedbacks are there.");
     }
   }else{
       throw('Sorry You need to be an Admin.');
@@ -63,6 +63,7 @@ export class component{
            }
        }
    }
+
    
    //remove feedback
    
@@ -83,7 +84,6 @@ export class component{
       for(let i=0;i<component.Entites.length;i++){
           for(let j=0;j<component.Entites[i].feedbacks.length;j++){
               if(component.Entites[i].feedbacks[j]==this.m_name){
-
                   console.log(component.Entites[i].feedbacks[j-1].toUpperCase());
               }
           }

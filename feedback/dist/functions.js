@@ -12,7 +12,7 @@ var component = /** @class */ (function () {
             var temp = {
                 title: titlename,
                 category: category,
-                feedbacks: []
+                feedbacks: [],
             };
             component.Entites.push(temp);
         }
@@ -38,6 +38,7 @@ var component = /** @class */ (function () {
         if (this.m_role === "Admin") {
             for (var i = 0; i < component.Entites.length; i++) {
                 console.log(component.Entites[i]);
+                console.log((component.Entites[i].feedbacks.length) / 2 + " feedbacks are there.");
             }
         }
         else {
