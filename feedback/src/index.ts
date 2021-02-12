@@ -21,21 +21,32 @@ import {component} from './functions';
     class-validator yup or joi.
 */
 
-let c1= new component("Test","Admin");
-c1.createEntity("Title","Technology");
-c1.createEntity("t2","Technology");
-c1.createEntity("titletest","Person");
+//create admin component
+let c1= new component("Tester","Admin");
+c1.createEntity("First Entity","Technology");
+c1.createEntity("Second Entity","Technology");
+c1.createEntity("Third Entity","Person");
+c1.createEntity("Fourth Entity","Person");
+
+//create user component
 let u1 = new component("Tets","User");
 
+//new feedbacks from user
+u1.writefeedback("First Entity","Hello");
+u1.writefeedback("First Entity","from");
+u1.writefeedback("First Entity","Typescript.");
 
-u1.writefeedback("Title","is This is working");
-u1.writefeedback("Title","is  working");
-u1.writefeedback("t2","This is also working");
-u1.writefeedback("t2","Added");
+u1.writefeedback("Second Entity","Hello");
+u1.writefeedback("Second Entity","World");
+u1.writefeedback("Second Entity","in ts.");
 
-u1.edityourfeedbacks("Hello there is working????");
+u1.writefeedback("Third Entity","This");
+u1.writefeedback("Third Entity","is third  Feedback.");
 
-c1.approveaspecific("is  working");
+u1.writefeedback("Fourth Entity","and");
+u1.writefeedback("Fourth Entity","the last one");
+
+c1.approveaspecific("from");
 u1.viewyourfeedbacks();
-c1.filterby("Person");
+c1.viewall();
 

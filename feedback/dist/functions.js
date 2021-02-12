@@ -1,6 +1,13 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.component = void 0;
+var class_validator_1 = require("class-validator");
 var component = /** @class */ (function () {
     function component(name, role) {
         this.m_name = name;
@@ -37,8 +44,8 @@ var component = /** @class */ (function () {
     component.prototype.viewall = function () {
         if (this.m_role === "Admin") {
             for (var i = 0; i < component.Entites.length; i++) {
-                console.log(component.Entites[i]);
-                console.log(((component.Entites[i].feedbacks.length) / 2) - 1 + " feedbacks are there.");
+                console.table(component.Entites[i]);
+                console.table(((component.Entites[i].feedbacks.length) / 2) - 1 + " feedbacks are there.");
             }
         }
         else {
@@ -124,6 +131,17 @@ var component = /** @class */ (function () {
         }
     };
     component.Entites = [];
+    __decorate([
+        class_validator_1.MinLength(3, {
+            message: 'Your $value is too short'
+        }),
+        class_validator_1.MaxLength(10, {
+            message: '$value getting long.'
+        })
+    ], component.prototype, "m_name", void 0);
+    __decorate([
+        class_validator_1.Length(4, 5)
+    ], component.prototype, "m_role", void 0);
     return component;
 }());
 exports.component = component;

@@ -56,8 +56,8 @@ export class component{
     viewall(){
       if(this.m_role==="Admin"){   
       for(let i=0;i<component.Entites.length;i++){
-        console.log(component.Entites[i]);
-        console.log(((component.Entites[i].feedbacks.length)/2)-1 + " feedbacks are there.");
+        console.table(component.Entites[i]);
+        console.table(((component.Entites[i].feedbacks.length)/2)-1 + " feedbacks are there.");
     }
   }else{
       throw('Sorry You need to be an Admin.');
