@@ -73,6 +73,17 @@ var component = /** @class */ (function () {
             }
         }
     };
+    component.prototype.edityourfeedbacks = function (texttoappend) {
+        for (var i = 0; i < component.Entites.length; i++) {
+            for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
+                if (component.Entites[i].feedbacks[j] == this.m_name) {
+                    component.Entites[i].feedbacks[j - 1] += texttoappend;
+                    break;
+                }
+            }
+            break;
+        }
+    };
     component.Entites = [];
     return component;
 }());

@@ -1,4 +1,5 @@
 import * as rl from 'readline';
+import { ExitStatus } from 'typescript';
 type roles = "Admin" | "User";
 type category = "Person" | "Technology";
 interface Entities {
@@ -89,5 +90,16 @@ export class component{
       }
   }
     
+  edityourfeedbacks(texttoappend:string){
+    for(let i=0;i<component.Entites.length;i++){
+        for(let j=0;j<component.Entites[i].feedbacks.length;j++){
+            if(component.Entites[i].feedbacks[j]==this.m_name){
+                component.Entites[i].feedbacks[j-1] += texttoappend;
+                break;
+            }
+        }
+        break;
+    }
+  }
 
 }
