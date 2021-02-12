@@ -16,6 +16,11 @@ import {component} from './functions';
     read all feedbacks.
     */
 
+/* To Do
+    Learn Validation, implement it.
+    class-validator yup or joi.
+*/
+
 let c1= new component("Test","Admin");
 c1.createEntity("Title","Technology");
 c1.createEntity("t2","Technology");

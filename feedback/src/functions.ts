@@ -1,4 +1,5 @@
-
+import * as cs from 'class-validator';
+import { Length, MaxLength, MinLength } from 'class-validator';
 type roles = "Admin" | "User";
 type category = "Person" | "Technology";
 interface Entities {
@@ -8,9 +9,17 @@ interface Entities {
 }
 
 export class component{
-    
+    @MinLength(3,{
+        message:'Your $value is too short'
+    })
+    @MaxLength(10,{
+        message:'$value getting long.'
+    })
     private m_name:string;
+
+    @Length(4,5)
     private m_role:roles;
+    
     static Entites: Entities[]=[];    
     constructor(name:string,role:roles){
         this.m_name=name;
