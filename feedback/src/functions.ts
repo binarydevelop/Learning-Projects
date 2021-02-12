@@ -75,7 +75,19 @@ export class component{
     }
    }
    //remove feedback
-   
+   removefeedback(titlename:string){
+       if(this.m_role == "Admin"){
+        for(let i=0;i<component.Entites.length;i++){console.log('hy');
+            for(let j=0;j<component.Entites[i].feedbacks.length;j++){
+                if(component.Entites[i].feedbacks[j]===titlename){console.log('true');
+                    component.Entites[i].feedbacks.splice(j,3);
+                }
+            }
+        }
+       }else{
+           throw('You are not an adminstrator');
+       }
+   }
      
                                                 /* USER */
     //Writefeedback with username
@@ -99,6 +111,7 @@ export class component{
       }
   }
     
+  //edit your feedbacks
   edityourfeedbacks(texttoappend:string){
     for(let i=0;i<component.Entites.length;i++){
         for(let j=0;j<component.Entites[i].feedbacks.length;j++){

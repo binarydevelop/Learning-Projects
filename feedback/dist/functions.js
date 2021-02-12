@@ -64,6 +64,22 @@ var component = /** @class */ (function () {
         }
     };
     //remove feedback
+    component.prototype.removefeedback = function (titlename) {
+        if (this.m_role == "Admin") {
+            for (var i = 0; i < component.Entites.length; i++) {
+                console.log('hy');
+                for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
+                    if (component.Entites[i].feedbacks[j] === titlename) {
+                        console.log('true');
+                        component.Entites[i].feedbacks.splice(j, 3);
+                    }
+                }
+            }
+        }
+        else {
+            throw ('You are not an adminstrator');
+        }
+    };
     /* USER */
     //Writefeedback with username
     component.prototype.writefeedback = function (titlename, text, status) {
@@ -85,6 +101,7 @@ var component = /** @class */ (function () {
             }
         }
     };
+    //edit your feedbacks
     component.prototype.edityourfeedbacks = function (texttoappend) {
         for (var i = 0; i < component.Entites.length; i++) {
             for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
