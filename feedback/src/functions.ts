@@ -48,7 +48,7 @@ export class component{
       if(this.m_role==="Admin"){   
       for(let i=0;i<component.Entites.length;i++){
         console.log(component.Entites[i]);
-        console.log((component.Entites[i].feedbacks.length)/2 + " feedbacks are there.");
+        console.log(((component.Entites[i].feedbacks.length)/2)-1 + " feedbacks are there.");
     }
   }else{
       throw('Sorry You need to be an Admin.');
@@ -64,17 +64,26 @@ export class component{
        }
    }
 
-   
+   //Approve a Feedback[Admin]
+   approveaspecific(titlename:string){
+    for(let i=0;i<component.Entites.length;i++){
+        for(let j=0;j<component.Entites[i].feedbacks.length;j++){
+            if( component.Entites[i].feedbacks[j]==titlename){
+                component.Entites[i].feedbacks[j+2]="Approved";
+            }
+        }
+    }
+   }
    //remove feedback
    
      
                                                 /* USER */
     //Writefeedback with username
-    writefeedback(titlename:string,text:string){
+    writefeedback(titlename:string,text:string,status:string="Not Approved"){
         for(let i=0;i<component.Entites.length;i++){
             if(component.Entites[i].title==titlename){
                 let username=this.m_name;
-                component.Entites[i].feedbacks.push(text,username);
+                component.Entites[i].feedbacks.push(text,username,status);
             }
         }
     }

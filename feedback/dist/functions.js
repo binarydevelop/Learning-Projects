@@ -38,7 +38,7 @@ var component = /** @class */ (function () {
         if (this.m_role === "Admin") {
             for (var i = 0; i < component.Entites.length; i++) {
                 console.log(component.Entites[i]);
-                console.log((component.Entites[i].feedbacks.length) / 2 + " feedbacks are there.");
+                console.log(((component.Entites[i].feedbacks.length) / 2) - 1 + " feedbacks are there.");
             }
         }
         else {
@@ -53,14 +53,25 @@ var component = /** @class */ (function () {
             }
         }
     };
+    //Approve a Feedback[Admin]
+    component.prototype.approveaspecific = function (titlename) {
+        for (var i = 0; i < component.Entites.length; i++) {
+            for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
+                if (component.Entites[i].feedbacks[j] == titlename) {
+                    component.Entites[i].feedbacks[j + 2] = "Approved";
+                }
+            }
+        }
+    };
     //remove feedback
     /* USER */
     //Writefeedback with username
-    component.prototype.writefeedback = function (titlename, text) {
+    component.prototype.writefeedback = function (titlename, text, status) {
+        if (status === void 0) { status = "Not Approved"; }
         for (var i = 0; i < component.Entites.length; i++) {
             if (component.Entites[i].title == titlename) {
                 var username = this.m_name;
-                component.Entites[i].feedbacks.push(text, username);
+                component.Entites[i].feedbacks.push(text, username, status);
             }
         }
     };
