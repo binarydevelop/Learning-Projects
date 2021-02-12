@@ -1,3 +1,4 @@
+import * as rl from 'readline';
 type roles = "Admin" | "User";
 type category = "Person" | "Technology";
 interface Entities {
@@ -48,12 +49,14 @@ export class component{
       for(let i=0;i<component.Entites.length;i++){
         console.log(component.Entites[i]);
     }
+  }else{
+      throw('Sorry You need to be an Admin.');
   }
    }
 
     //accessSpecific[Admin]
-   accessSpecific(titlename:string){
-       for(let i=0;i<component.Entites.length;i++){console.log(component.Entites.length);
+   accessSpecificEntity(titlename:string){
+       for(let i=0;i<component.Entites.length;i++){
            if(component.Entites[i].title==titlename){
                console.log(component.Entites[i]);
            }
@@ -61,7 +64,7 @@ export class component{
    }
    
    //remove feedback
-   removefeedback(){}
+   
      
                                                 /* USER */
     //Writefeedback with username
@@ -69,13 +72,22 @@ export class component{
         for(let i=0;i<component.Entites.length;i++){
             if(component.Entites[i].title==titlename){
                 let username=this.m_name;
-                console.log(username);
                 component.Entites[i].feedbacks.push(text,username);
             }
         }
     }
     
-    //editFeedBack
-   
+    //view self feedbacks
+  viewyourfeedbacks(){
+      for(let i=0;i<component.Entites.length;i++){
+          for(let j=0;j<component.Entites[i].feedbacks.length;j++){
+              if(component.Entites[i].feedbacks[j]==this.m_name){
+
+                  console.log(component.Entites[i].feedbacks[j-1].toUpperCase());
+              }
+          }
+      }
+  }
+    
 
 }

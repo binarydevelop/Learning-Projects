@@ -40,36 +40,35 @@ var component = /** @class */ (function () {
                 console.log(component.Entites[i]);
             }
         }
+        else {
+            throw ('Sorry You need to be an Admin.');
+        }
     };
     //accessSpecific[Admin]
-    component.prototype.accessSpecific = function (titlename) {
+    component.prototype.accessSpecificEntity = function (titlename) {
         for (var i = 0; i < component.Entites.length; i++) {
-            console.log(component.Entites.length);
             if (component.Entites[i].title == titlename) {
                 console.log(component.Entites[i]);
             }
         }
     };
     //remove feedback
-    component.prototype.removefeedback = function () { };
     /* USER */
     //Writefeedback with username
     component.prototype.writefeedback = function (titlename, text) {
         for (var i = 0; i < component.Entites.length; i++) {
             if (component.Entites[i].title == titlename) {
                 var username = this.m_name;
-                console.log(username);
                 component.Entites[i].feedbacks.push(text, username);
             }
         }
     };
-    //editFeedBack
-    component.prototype.editfeedBack = function (entityTitleName, texttoappend) {
+    //view self feedbacks
+    component.prototype.viewyourfeedbacks = function () {
         for (var i = 0; i < component.Entites.length; i++) {
             for (var j = 0; j < component.Entites[i].feedbacks.length; j++) {
-                if (component.Entites[i].title == entityTitleName &&
-                    component.Entites[i].feedbacks[j] == this.m_name) {
-                    component.Entites[i].feedbacks[j - 1].concat(texttoappend);
+                if (component.Entites[i].feedbacks[j] == this.m_name) {
+                    console.log(component.Entites[i].feedbacks[j - 1].toUpperCase());
                 }
             }
         }

@@ -7,6 +7,12 @@ let u1 = new component("Tets","User");
 
 
 u1.writefeedback("Title","is This is working");
-u1.editfeedBack("Title","Is this also working???");
+u1.writefeedback("Title","is  working");
+u1.writefeedback("t2","This is also working");
+u1.writefeedback("t2","Added");
+
+
 c1.viewall();
+u1.viewyourfeedbacks();
+
 //c1.accessSpecific("Title");
