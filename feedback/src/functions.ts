@@ -1,4 +1,4 @@
-import * as cs from 'class-validator';
+
 import { Length, MaxLength, MinLength } from 'class-validator';
 type roles = "Admin" | "User";
 type category = "Person" | "Technology";
