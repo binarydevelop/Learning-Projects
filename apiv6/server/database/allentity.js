@@ -1,4 +1,4 @@
-let allEntity=[
+exports.allEntity=[
     {
         "m_id": "Tushar",
         "m_category": "Person",
@@ -7,7 +7,12 @@ let allEntity=[
     {
         "m_id": "Javascript",
         "m_category": "Technology",
-        "feedback": []
+        "feedback": [ 
+            {
+            "feed": "Learning some Javascript",
+            "by": "Flash"
+            },
+    ]
     },
     {
         "m_id": "Node Js",
@@ -21,4 +26,3 @@ let allEntity=[
     }
 ];
 
-module.exports = allEntity;
