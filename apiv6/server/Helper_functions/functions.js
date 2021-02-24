@@ -22,3 +22,12 @@ module.exports.findTheEntity = (id,array) => {
         }
     }
 }
+
+/* module.exports.findTheFeedback = (array) => {
+    for(let i = 0 ; i< array.length ; i++ ) {
+        if(array.feedback[i].signature == req.params.signature){console.log(array.feedback[i]);
+            return array.feedback[i];
+            
+        }
+    }
+} */
