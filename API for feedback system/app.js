@@ -1,11 +1,12 @@
 const express = require('express');
 const app = express();
 const bodyparser = require('body-parser')
+const getEnttiy = require('./controller')
 
 
 //import class and modules
-let alluser= require('./data');
-let allentity= require('./all_entity_data');
+let alluser= [];
+let allentity= [];
 
 class User{
     m_name;
@@ -39,17 +40,27 @@ const length = allentity.length;
     
    */
 
-app.use(bodyparser.urlencoded({extended:true}));
+app.use(bodyparser.json());
 
                                                     /* ADMIN */
 //view all Entites by admin
-app.get('/:code',(req,res) => {
-    if(req.params.code === '00') {
-        for(let i=0; i<length;i++){
-            res.json(allentity[i]);
+app.get('/:code',getEntity)
+
+
+//Add Entity
+app.post('/add/entity/:code',(req,res)=>{
+    if(req.params.code == 001){
+        if(req.body.category ==='Person' || req.body.category === 'Technology'){console.log('Runs');
+            let new_Entity = new Entity(req.body.title,req.body.category);
+            console.log('Rus');
+            allentity.push(new_Entity);
+            res.json({allentity})
         }
+    } else {
+        res.json('You cannot create entity, you are not an admin.')
     }
 })
+
 //ADD USER
 app.post('/add/:code', (req,res) => {
     //TO-DO : Verifying token and giving Permission
@@ -61,18 +72,10 @@ app.post('/add/:code', (req,res) => {
     }else{
         res.json('You CANNOT CREATE USER AS YOU are not an ADMIN.')
     }
-
-    //Add Entity
-    if(req.params.code == 001){
-        if(req.body.category==='Person' || req.body.category === 'Technology'){
-            let new_Entity = new Entity(req.body.title,req.body.category);
-            allentity.push(new_Entity);
-            res.json({allentity})
-        }
-    } else {
-        res.json('You cannot create entity, you are not an admin.')
-    }
 })
+    
+    
+
 
 //delete Entity by id
 app.delete('/delete/:code/entity/:id', (req,res) => {
@@ -85,6 +88,7 @@ app.delete('/delete/:code/entity/:id', (req,res) => {
         }
     }
 })
+
 
 //delete feedback in an Entity
 app.delete('/delete/:code/:m_id/:id',(req,res) => {
@@ -117,7 +121,6 @@ if(req.params.code==0){
     }
 }   
 })
-
 
                                                     /* USER */
 
