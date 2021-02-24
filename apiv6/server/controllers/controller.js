@@ -5,6 +5,7 @@ const db_user = require('../database/alluser');
 const db_entity = require('../database/allentity');
 
 
+
 exports.home = (req,res) => {
     res.send('works');
 }
@@ -55,9 +56,9 @@ exports.createUser = (req,res) => {
 }
 
 exports.addFeedback = (req,res) => {
-    if(h_function.checkIfUserExist(req.body.name,db_user)){
-        let toadd = h_function.findTheEntity(req.params.id,allEntity);
-        toadd.feedback.push(req.body.content);
+    if(h_function.checkIfUserExist(req.body.name,db_user.allUser)){  
+        let toadd = h_function.findTheEntity(req.params.id,db_entity.allEntity);
+        toadd.feedback.push({feed : req.body.content, by : req.body.name});
         res.json(toadd);
     }else{
         res.send("You do not exist as a User.")

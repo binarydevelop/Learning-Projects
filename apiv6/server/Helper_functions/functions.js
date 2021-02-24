@@ -12,7 +12,6 @@ module.exports.checkIfUserExist = (userName, array) => {
           return true; 
         }
     }
-        return false;
     }
 
 
