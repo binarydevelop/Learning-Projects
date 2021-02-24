@@ -1,4 +1,4 @@
-let allUser=[
+exports.allUser=[
    
    {
         "m_name": "Jon",
@@ -23,4 +23,3 @@ let allUser=[
 
 ];
 
-module.exports= allUser;

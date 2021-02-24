@@ -9,13 +9,12 @@ module.exports.findDeleteEntity = (array,id) => {
 module.exports.checkIfUserExist = (userName, array) => {
     for(let i=0 ; i<array.length ; i++){
         if(array[i].m_name == userName){
-            console.log(array[i].m_name);
-           
-        } else {
-            return false;
+          return true; 
         }
     }
-}
+        return false;
+    }
+
 
 module.exports.findTheEntity = (id,array) => {
     for(let i=0; i<array.length ; i++){
