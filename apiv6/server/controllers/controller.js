@@ -1,6 +1,6 @@
-const User = require('../classes/user');
-const Entity = require('../classes/entity');
-const h_function = require('../Helper_functions/functions');
+const User = require('../utils/classes/user');
+const Entity = require('../utils/classes/entity');
+const h_function = require('../utils/Helper_functions/functions');
 const db_user = require('../database/alluser');
 const db_entity = require('../database/allentity');
 
@@ -122,7 +122,7 @@ exports.approvefeed = (req,res) => {
 exports.deleteFeedback = (req,res) => {
     if(req.params.code == 00){
         let todelete =  h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
-        for(let i=0; i<todelete.feedback.length; i++){
+        for(let i=0; i < todelete.feedback.length ; i++){
             if(todelete.feedback[i].signature == req.params.signature){
                 todelete.feedback.splice(i,1);
                 res.send('Deleted Feedback Successfully.')
