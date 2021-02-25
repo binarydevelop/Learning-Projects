@@ -91,7 +91,7 @@ exports.getFeedStatus = (req,res) => {
 }
 
 exports.viewallfeed = (req,res) => {
-    if(req.params.id == 11){
+    if(req.params.code == 11){
         let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
         for(let i = 0; i<toview.feedback.length; i++){
             if(toview.feedback[i].status == 'Active'){
@@ -100,4 +100,21 @@ exports.viewallfeed = (req,res) => {
      }
      res.end();
   }  
+}
+
+
+exports.approvefeed = (req,res) => {
+    if(req.params.code == 00){
+        let toapprove = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+            for(let i=0; i<toapprove.feedback.length; i++){
+                if(toapprove.feedback[i].signature == req.params.signature && toapprove.feedback[i].status == 'Inactive'){
+                    toapprove.feedback[i].status = 'Active';
+                    res.send('Updated Status Successfully.')
+                } else {
+                    res.send('Already Active.');
+                }
+            }
+    }else{
+        res.send('You are not an Admin.')
+    }
 }
