@@ -1,6 +1,6 @@
 const User = require('../utils/classes/user');
 const Entity = require('../utils/classes/entity');
-const h_function = require('../utils/Helper_functions/functions');
+const hFunction = require('../utils/Helper_functions/functions');
 const db_user = require('../database/alluser');
 const db_entity = require('../database/allentity');
 
@@ -31,7 +31,7 @@ exports.createEntity = (req,res) => {
 }
 
 exports.deleteEntity = (req,res) => {
-    h_function.findDeleteEntity(allEntity,req.params.id);
+    hFunction.findDeleteEntity(allEntity,req.params.id);
     res.send(db_entity.allEntity);
 }
 
@@ -60,8 +60,8 @@ exports.createUser = (req,res) => {
 }
 
 exports.addFeedback = (req,res) => {
-    if(h_function.checkIfUserExist(req.body.name,db_user.allUser)){  
-        let toadd = h_function.findTheEntity(req.params.id,db_entity.allEntity);
+    if(hFunction.checkIfUserExist(req.body.name,db_user.allUser)){  
+        let toadd = hFunction.findTheEntity(req.params.id,db_entity.allEntity);
         toadd.feedback.push({feed : req.body.content, by : req.body.name, signature : req.body.sign , status : 'Inactive'});
         res.json(toadd);
     }else{
@@ -70,7 +70,7 @@ exports.addFeedback = (req,res) => {
 }
 
 exports.updateFeedback = (req,res)=>{
-  let toupdate = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+  let toupdate = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
    for(let i=0; i < toupdate.feedback.length ; i++){
         if(req.params.signature == toupdate.feedback[i].signature ){
             toupdate.feedback[i].feed = req.body.updateit
@@ -81,7 +81,7 @@ exports.updateFeedback = (req,res)=>{
       
 exports.getFeedStatus = (req,res) => {
     if(req.params.id == 11){
-        let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        let toview = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
         for(let i = 0; i<toview.feedback.length; i++){
             if(toview.feedback[i].signature == req.params.signature){
                 res.json(toview.feedback[i].status)
@@ -90,9 +90,9 @@ exports.getFeedStatus = (req,res) => {
   }  
 }
 
-exports.viewallfeed = (req,res) => {
+exports.viewAllFeed = (req,res) => {
     if(req.params.code == 11){
-        let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        let toview = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
         for(let i = 0; i<toview.feedback.length; i++){
             if(toview.feedback[i].status == 'Active'){
                 res.write(toview.feedback[i])
@@ -103,9 +103,9 @@ exports.viewallfeed = (req,res) => {
 }
 
 
-exports.approvefeed = (req,res) => {
+exports.approveFeed = (req,res) => {
     if(req.params.code == 00){
-        let toapprove = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        let toapprove = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
             for(let i=0; i<toapprove.feedback.length; i++){
                 if(toapprove.feedback[i].signature == req.params.signature && toapprove.feedback[i].status == 'Inactive'){
                     toapprove.feedback[i].status = 'Active';
@@ -121,7 +121,7 @@ exports.approvefeed = (req,res) => {
 
 exports.deleteFeedback = (req,res) => {
     if(req.params.code == 00){
-        let todelete =  h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        let todelete =  hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
         for(let i=0; i < todelete.feedback.length ; i++){
             if(todelete.feedback[i].signature == req.params.signature){
                 todelete.feedback.splice(i,1);
@@ -135,7 +135,7 @@ exports.deleteFeedback = (req,res) => {
 }
     }
 
-exports.filterbycategory = (req,res) => {
+exports.filterByCategory = (req,res) => {
     for(let i=0; i<db_entity.allEntity.length ; i++){
         if(db_entity.allEntity[i].m_category == req.params.m_category){
             res.write(JSON.stringify(db_entity.allEntity[i]))
