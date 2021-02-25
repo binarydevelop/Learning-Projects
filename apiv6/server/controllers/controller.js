@@ -80,10 +80,12 @@ exports.updateFeedback = (req,res)=>{
 }
       
 exports.getFeedStatus = (req,res) => {
-    let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
-    for(let i = 0; i<toview.feedback.length; i++){
-        if(toview.feedback[i].signature == req.params.signature){
-            res.json(toview.feedback[i].status)
+    if(req.params.id == 11){
+        let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        for(let i = 0; i<toview.feedback.length; i++){
+            if(toview.feedback[i].signature == req.params.signature){
+                res.json(toview.feedback[i].status)
         }
-    }
+     }
+  }  
 }
