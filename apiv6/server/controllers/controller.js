@@ -134,3 +134,14 @@ exports.deleteFeedback = (req,res) => {
     res.send('You are not an Admin.')
 }
     }
+
+exports.filterbycategory = (req,res) => {
+    for(let i=0; i<db_entity.allEntity.length ; i++){
+        if(db_entity.allEntity[i].m_category == req.params.m_category){
+            res.write(JSON.stringify(db_entity.allEntity[i]))
+        } else {
+            res.write('Not a valid Category.')
+        }
+    }
+    res.end();
+}
