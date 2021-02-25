@@ -21,7 +21,7 @@ exports.createEntity = (req,res) => {
         return;
     }
     if(req.params.code == 00) {
-        const entity = new Entity(req.body.id,req.body.category);
+        const entity = new Entity(req.body.title,req.body.category);
         allEntity.push(entity);
         res.send(db_entity.allEntity);
     } else {
