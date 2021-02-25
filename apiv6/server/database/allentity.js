@@ -10,17 +10,22 @@ exports.allEntity=[
         "m_category": "Technology",
         "feedback": [ 
             {
-            "feed": "Learning some Javascript",
-            "by": "Flash"
-            },
-            {
-                "feed": "Just Updated this function",
-                "by": "Lannister"
-            },
-            {
-                "feed": " Jon knows nothing",
+                "feed": "This is addeda as feedback",
                 "by": "Flash",
-                "signature": "uni@#423racters"
+                "signature": "assdadf",
+                "status": "Active"
+            },
+            {
+                "feed": "This is addeda as feedback",
+                "by": "Flash",
+                "signature": "assddf",
+                "status": "Active"
+            },
+            {
+                "feed": "This is addeda as feedback",
+                "by": "Flash",
+                "signature": "asasaffdf",
+                "status": "Inactive"
             }
     ]
     },

@@ -89,3 +89,15 @@ exports.getFeedStatus = (req,res) => {
      }
   }  
 }
+
+exports.viewallfeed = (req,res) => {
+    if(req.params.id == 11){
+        let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        for(let i = 0; i<toview.feedback.length; i++){
+            if(toview.feedback[i].status == 'Active'){
+                res.write(toview.feedback[i])
+        }
+     }
+     res.end();
+  }  
+}
