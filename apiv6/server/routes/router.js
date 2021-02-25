@@ -15,5 +15,6 @@ router.post('/api/add/feedback/:id/:code', controller.addFeedback); // add Feedb
 router.put('/api/update/feedback/:m_id/:signature/:code',controller.approvefeed);
 router.put('/api/update/:m_id/:signature/:code',controller.updateFeedback); // Update feedback [ {"updateit":"This should update"} ]
 router.delete('/api/delete/entity/:id/:code', controller.deleteEntity); // delete Entity by id [only Admin]
+router.delete('/api/delete/feedback/:m_id/:signature/:code',controller.deleteFeedback);
 
 module.exports = router;

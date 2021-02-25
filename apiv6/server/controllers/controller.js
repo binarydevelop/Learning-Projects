@@ -118,3 +118,19 @@ exports.approvefeed = (req,res) => {
         res.send('You are not an Admin.')
     }
 }
+
+exports.deleteFeedback = (req,res) => {
+    if(req.params.code == 00){
+        let todelete =  h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+        for(let i=0; i<todelete.feedback.length; i++){
+            if(todelete.feedback[i].signature == req.params.signature){
+                todelete.feedback.splice(i,1);
+                res.send('Deleted Feedback Successfully.')
+            } else {
+                res.send('No records Found');
+            }
+        }
+}else{
+    res.send('You are not an Admin.')
+}
+    }
