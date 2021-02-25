@@ -62,7 +62,7 @@ exports.createUser = (req,res) => {
 exports.addFeedback = (req,res) => {
     if(h_function.checkIfUserExist(req.body.name,db_user.allUser)){  
         let toadd = h_function.findTheEntity(req.params.id,db_entity.allEntity);
-        toadd.feedback.push({feed : req.body.content, by : req.body.name, signature : req.body.sign});
+        toadd.feedback.push({feed : req.body.content, by : req.body.name, signature : req.body.sign , status : 'Inactive'});
         res.json(toadd);
     }else{
         res.send("You do not exist as a User.")
@@ -71,10 +71,19 @@ exports.addFeedback = (req,res) => {
 
 exports.updateFeedback = (req,res)=>{
   let toupdate = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
-   for(let i=0; i<toupdate.feedback.length ; i++){
+   for(let i=0; i < toupdate.feedback.length ; i++){
         if(req.params.signature == toupdate.feedback[i].signature ){
             toupdate.feedback[i].feed = req.body.updateit
             res.json(toupdate.feedback[i]);
         }
    }
+}
+      
+exports.getFeedStatus = (req,res) => {
+    let toview = h_function.findTheEntity(req.params.m_id,db_entity.allEntity);
+    for(let i = 0; i<toview.feedback.length; i++){
+        if(toview.feedback[i].signature == req.params.signature){
+            res.json(toview.feedback[i].status)
+        }
+    }
 }

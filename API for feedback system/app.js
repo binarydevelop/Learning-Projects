@@ -44,10 +44,10 @@ app.use(bodyparser.json());
 
                                                     /* ADMIN */
 //view all Entites by admin
-app.get('/:code',getEntity)
+//app.get('/:code',getEntity)
 
 
-//Add Entity
+//Add Entity - DONE
 app.post('/add/entity/:code',(req,res)=>{
     if(req.params.code == 001){
         if(req.body.category ==='Person' || req.body.category === 'Technology'){console.log('Runs');
@@ -61,7 +61,7 @@ app.post('/add/entity/:code',(req,res)=>{
     }
 })
 
-//ADD USER
+//ADD USER  -- DONE
 app.post('/add/:code', (req,res) => {
     //TO-DO : Verifying token and giving Permission
     //Admin add user
@@ -77,7 +77,7 @@ app.post('/add/:code', (req,res) => {
     
 
 
-//delete Entity by id
+//delete Entity by id -- dONE
 app.delete('/delete/:code/entity/:id', (req,res) => {
     if(req.params.code == 00){
         for(let i=0; i<length; i++){
@@ -124,7 +124,7 @@ if(req.params.code==0){
 
                                                     /* USER */
 
-//Add feedback to an Entity
+//Add feedback to an Entity --Done
 app.post('/add/:code/:entityid', (req,res) => {
         if(req.params.code == 11) { 
             for(let i=0; i<allentity.length;i++){
@@ -141,7 +141,7 @@ app.post('/add/:code/:entityid', (req,res) => {
         }
 })
 
-//update feedback
+//update feedback ---Done
 app.put('/update/:m_id/:id/:by',(req,res)=>{
     for(let i=0; i<length; i++) {
         if(allentity[i].m_id==req.params.m_id){
@@ -156,7 +156,7 @@ app.put('/update/:m_id/:id/:by',(req,res)=>{
     }
 })
 
-//see status of feedback user
+//see status of feedback user 
 app.get('/staus/:m_id/:id/:by',(req,res)=>{
     for(let i=0; i<length; i++) {
         if(allentity[i].m_id==req.params.m_id){

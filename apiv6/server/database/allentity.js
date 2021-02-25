@@ -45,10 +45,11 @@ exports.allEntity=[
         "m_category": "Technology",
         "feedback": [
             {
-            "feed": "This is addeda as feedback",
-            "by": "Flash",
-            "signature": "asdf"
-        }
+                "feed": "This is addeda as feedback",
+                "by": "Flash",
+                "signature": "asdf",
+                "status": "Inactive"
+            }
     ]
     }
 ];
