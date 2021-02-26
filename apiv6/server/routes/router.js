@@ -1,7 +1,8 @@
 const controller = require('../controllers/controller');
 const express= require('express');
 const router = express.Router();
-const { addUserValidation } = require('../validation/user/user_validation')
+const { addUserValidation } = require('../validation/user/user_validation');
+const { addEntityValidation } = require('../validation/entity/entity_validation');
 
 //API ROUTES
 router.get('/api', controller.home); //Testing Route
@@ -12,7 +13,7 @@ router.get('/api/viewfeedbacks/:m_id/:code',controller.viewAllFeed)//view all fe
 router.get('/api/filter/:m_category',controller.filterByCategory) //filter by category
 
 
-router.post('/api/create/entity/:code', controller.createEntity); //create a new Entity(00) [ {"title":"Blockchain","category":"Technology"} ]
+router.post('/api/create/entity/:code', addEntityValidation, controller.createEntity); //create a new Entity(00) [ {"title":"Blockchain","category":"Technology"} ]
 router.post('/api/create/user/:code', addUserValidation, controller.createUser); //create a new User(00) [{"name":"Tushar","power":"admin"}]
 router.post('/api/add/feedback/:id/:code', controller.addFeedback); // add Feedback to an Entity(11) [Only USER] [  { "name":"Flash", "content":"This is addeda as feedback","by": "Flash","sign": "asdf"} ]
 
