@@ -8,7 +8,7 @@ const schema  = {
             .required(),
 
         power : joi.string()
-            .valid("Admin","User"),
+            .valid("Admin","User")
         
     })
 }
