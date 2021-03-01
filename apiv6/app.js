@@ -5,6 +5,7 @@ const bodyparser = require("body-parser");
 const dotenv = require('dotenv');
 dotenv.config();
 
+const connectDb = require('./server/database/connection')
 
 app.use(bodyparser.json());
 
@@ -13,6 +14,7 @@ app.use(bodyparser.json());
 app.use('/', router);
 
 
+connectDb();
 app.listen(process.env.PORT,() => {
     console.log(`Server is running on ${process.env.PORT}`)
 });

@@ -1,8 +1,6 @@
 const User = require('../utils/classes/user');
 const Entity = require('../utils/classes/entity');
 const hFunction = require('../utils/Helper_functions/functions');
-const db_user = require('../database/alluser');
-const db_entity = require('../database/allentity');
 
 
 
