@@ -2,7 +2,7 @@ const User = require('../utils/classes/user');
 const Entity = require('../utils/classes/entity');
 const hFunction = require('../utils/Helper_functions/functions');
 let userDb = require('../models/user_model')
-
+let entityDb = require('../models/entity_model')
 
 exports.home = (req,res) => {
     res.send('works');
@@ -19,13 +19,19 @@ exports.createEntity = (req,res) => {
         return;
     }
     if(req.params.code == 00) {
-        const entity = new Entity(req.body.title,req.body.category);
-        allEntity.push(entity);
-        res.send(db_entity.allEntity);
-    } else {
-        res.status(400).send({ message : "You are not an Admin"});
-        return;
-    }
+        const newEntity = new entityDb({
+            Title : req.body.title,
+            Category : req.body.category
+        });
+        newEntity.save(newEntity)
+                 .then(data =>{
+                      res.send(data);
+                    })
+                 .catch(err => {
+                    res.status(500).send({message:err.message})
+                 })
+       
+    } 
 }
 
 exports.deleteEntity = (req,res) => {
@@ -57,7 +63,7 @@ exports.createUser = (req,res) => {
                  .then(data =>{
                         res.send(data);
                     })
-                    .catch(err => {
+                 .catch(err => {
                         res.status(500).send({message:err.message})
                     })
             
