@@ -8,8 +8,10 @@ const schema  = {
             .required(),
 
         power : joi.string()
-            .valid("Admin","User")
+            .valid("Admin","User"),
         
+        email : joi.string()
+                    .email()
     })
 }
-module.exports = schema;
+module.exports = schema;    

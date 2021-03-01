@@ -1,7 +1,7 @@
 const User = require('../utils/classes/user');
 const Entity = require('../utils/classes/entity');
 const hFunction = require('../utils/Helper_functions/functions');
-
+let userDb = require('../models/user_model')
 
 
 exports.home = (req,res) => {
@@ -49,11 +49,18 @@ exports.createUser = (req,res) => {
     }
 
     if(req.params.code == 00){
-            let new_user= new User(req.body.name,req.body.power);
-            db_user.allUser.push(new_user);
-            res.json(allUser);
-    }else{
-        res.json('You dont have permission to create a User.')
+            let newUser= new userDb({
+                name : req.body.name,
+                power :req.body.power,
+                email: req.body.email});
+         newUser.save(newUser)
+                 .then(data =>{
+                        res.send(data);
+                    })
+                    .catch(err => {
+                        res.status(500).send({message:err.message})
+                    })
+            
     }
 }
 
