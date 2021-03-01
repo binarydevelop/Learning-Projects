@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const router =  require('./server/routes/router');
 const bodyparser = require("body-parser");
+const dotenv = require('dotenv');
+dotenv.config();
 
 
 app.use(bodyparser.json());
@@ -11,6 +13,6 @@ app.use(bodyparser.json());
 app.use('/', router);
 
 
-app.listen('3000',() => {
-    console.log(`Server is running on http://localhost:3000`)
+app.listen(process.env.PORT,() => {
+    console.log(`Server is running on ${process.env.PORT}`)
 });
