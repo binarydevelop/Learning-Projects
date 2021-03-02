@@ -95,15 +95,9 @@ exports.addFeedback = (req,res) => {
                      .catch(err => res.send(err))
             }
 }
-
+//see if user exist -> find the entity using id then find the feedback to edit using signature and update it.
 exports.updateFeedback = (req,res) => {
-  let toupdate = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
-   for(let i=0; i < toupdate.feedback.length ; i++){
-        if(req.params.signature == toupdate.feedback[i].signature ){
-            toupdate.feedback[i].feed = req.body.updateit
-            res.json(toupdate.feedback[i]);
-        }
-   }
+    
 }
       
 exports.getFeedStatus = (req,res) => {
@@ -126,11 +120,13 @@ exports.viewAllFeed = (req,res) => {
 
 
 exports.approveFeed = (req,res) => {
-    if(req.params.code == 00){
-       let entity = entityDb.find({_id : req.params.id})
-    
-    }
-}
+        entityDb.findOneAndUpdate(
+            {_id:req.params.id, "Feedbacks._id" : req.params.signature},
+            {$set : {'Feedbacks.$.status': "Active"}})
+        .then(data => res.send(data))
+        .catch(err => res.send(err))
+    } 
+
 
 exports.deleteFeedback = (req,res) => {
     if(req.params.code == 00){
