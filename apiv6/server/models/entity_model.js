@@ -8,8 +8,13 @@ let entitySchema=new mongoose.Schema({
     Category :{
         type: String,
         required :true
-    }
-})
+    },
+    Feedbacks : [
+        {Feed: String , 
+         by: String ,
+         status: String  
+        }]
+},{timestamps:true})
 
 const entityDb = mongoose.model('entity',entitySchema);
 module.exports = entityDb;

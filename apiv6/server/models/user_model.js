@@ -14,7 +14,7 @@ let userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-})
+},{timestamps:true})
 
 const userDb = mongoose.model('users',userSchema);
 module.exports = userDb;

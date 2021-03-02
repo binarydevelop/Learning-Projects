@@ -25,7 +25,8 @@ exports.createEntity = (req,res) => {
     if(req.params.code == 00) {
         const newEntity = new entityDb({
             Title : req.body.title,
-            Category : req.body.category
+            Category : req.body.category,
+            Feedbacks: []
         });
         newEntity.save(newEntity)
                  .then(data =>{
@@ -39,16 +40,22 @@ exports.createEntity = (req,res) => {
 }
 
 exports.deleteEntity = (req,res) => {
-    hFunction.findDeleteEntity(allEntity,req.params.id);
-    res.send(db_entity.allEntity);
+   if(req.params.code == 00){
+       entityDb.deleteOne({_id:req.params.id})
+                .then(res.send({entityDb}));
+   }
 }
 
 exports.getEntity = (req,res) => {
     if(req.params.code == 00){
-        res.send(db_entity.allEntity);
-    } else {
-        res.send('You do not have access to view as an Admin')
-    }
+        entityDb.find()
+        .then(data => {
+            res.send(data)
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    } 
 }
 
 exports.createUser = (req,res) => {
@@ -74,17 +81,22 @@ exports.createUser = (req,res) => {
     }
 }
 
+   
 exports.addFeedback = (req,res) => {
-    if(hFunction.checkIfUserExist(req.body.name,db_user.allUser)){  
-        let toadd = hFunction.findTheEntity(req.params.id,db_entity.allEntity);
-        toadd.feedback.push({feed : req.body.content, by : req.body.name, signature : req.body.sign , status : 'Inactive'});
-        res.json(toadd);
-    }else{
-        res.send("You do not exist as a User.")
-    }
+            let userExist = userDb.find({name : req.body.name})
+            if(userExist){ 
+                let feedbackObj = {Feed : req.body.content,
+                                   by: req.body.name,
+                                   status: 'Inactive'}
+                entityDb.findOneAndUpdate(
+                    {_id:req.params.id},
+                    {$push : {Feedbacks :feedbackObj} },
+                    ).then(data => res.send(data))
+                     .catch(err => res.send(err))
+            }
 }
 
-exports.updateFeedback = (req,res)=>{
+exports.updateFeedback = (req,res) => {
   let toupdate = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
    for(let i=0; i < toupdate.feedback.length ; i++){
         if(req.params.signature == toupdate.feedback[i].signature ){
@@ -96,12 +108,7 @@ exports.updateFeedback = (req,res)=>{
       
 exports.getFeedStatus = (req,res) => {
     if(req.params.id == 11){
-        let toview = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
-        for(let i = 0; i<toview.feedback.length; i++){
-            if(toview.feedback[i].signature == req.params.signature){
-                res.json(toview.feedback[i].status)
-        }
-     }
+        
   }  
 }
 
@@ -120,17 +127,8 @@ exports.viewAllFeed = (req,res) => {
 
 exports.approveFeed = (req,res) => {
     if(req.params.code == 00){
-        let toapprove = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
-            for(let i=0; i<toapprove.feedback.length; i++){
-                if(toapprove.feedback[i].signature == req.params.signature && toapprove.feedback[i].status == 'Inactive'){
-                    toapprove.feedback[i].status = 'Active';
-                    res.send('Updated Status Successfully.')
-                } else {
-                    res.send('Already Active.');
-                }
-            }
-    }else{
-        res.send('You are not an Admin.')
+       let entity = entityDb.find({_id : req.params.id})
+    
     }
 }
 
@@ -151,12 +149,5 @@ exports.deleteFeedback = (req,res) => {
     }
 
 exports.filterByCategory = (req,res) => {
-    for(let i=0; i<db_entity.allEntity.length ; i++){
-        if(db_entity.allEntity[i].m_category == req.params.m_category){
-            res.write(JSON.stringify(db_entity.allEntity[i]))
-        } else {
-            res.write('Not a valid Category.')
-        }
-    }
-    res.end();
+   entityDb.find({Category:req.params.m_category})
 }

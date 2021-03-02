@@ -8,7 +8,14 @@ const schema  = {
             .required(),
             
         category : joi.string()
-            .valid("Person","Technology")
+            .valid("Person","Technology"),
+
+        Feedbacks : joi.array().items({
+            Feed : joi.string(),
+            by: joi.string(),
+            status: joi.string()
+                        .valid("Active","Inactive")
+        })
     })
 }
 module.exports = schema;
