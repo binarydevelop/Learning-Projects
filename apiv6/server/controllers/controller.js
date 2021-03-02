@@ -1,5 +1,3 @@
-const User = require('../utils/classes/user');
-const Entity = require('../utils/classes/entity');
 const hFunction = require('../utils/Helper_functions/functions');
 let userDb = require('../models/user_model')
 let entityDb = require('../models/entity_model')
@@ -9,7 +7,13 @@ exports.home = (req,res) => {
 }
 
 exports.getUsers = (req,res) => {
-    res.send(db_user.allUser);
+    userDb.find()
+    .then(data => {
+        res.send(data)
+    })
+    .catch(err => {
+        res.status(500).send({message:err.message})
+    })
 }
 
 exports.createEntity = (req,res) => {
