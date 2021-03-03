@@ -1,6 +1,7 @@
 const hFunction = require('../utils/Helper_functions/functions');
 let userDb = require('../models/user_model')
 let entityDb = require('../models/entity_model')
+const bcrypt = require('bcryptjs')
 
 exports.home = (req,res) => {
     res.send('works');
@@ -58,7 +59,7 @@ exports.getEntity = (req,res) => {
     } 
 }
 
-exports.createUser = (req,res) => {
+exports.createUser = async (req,res) => {
     //validate Request
     if(!req.body){
         res.status(400).send({ message : "Content can not be emtpy!"});
@@ -66,11 +67,14 @@ exports.createUser = (req,res) => {
     }
 
     if(req.params.code == 00){
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.password,salt);
+
             let newUser= new userDb({
                 name : req.body.name,
-                power :req.body.power,
+                power: req.body.power,
                 email: req.body.email,
-                password :req.body.password});
+                password: hashedPassword});
          newUser.save(newUser)
                  .then(data =>{
                         res.send(data);
