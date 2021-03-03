@@ -11,7 +11,10 @@ const schema  = {
             .valid("Admin","User"),
         
         email : joi.string()
-                    .email()
+                    .email(),
+                    
+        password : joi.string()
+                      .required()
     })
 }
 module.exports = schema;    

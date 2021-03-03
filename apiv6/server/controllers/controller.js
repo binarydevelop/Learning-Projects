@@ -69,7 +69,8 @@ exports.createUser = (req,res) => {
             let newUser= new userDb({
                 name : req.body.name,
                 power :req.body.power,
-                email: req.body.email});
+                email: req.body.email,
+                password :req.body.password});
          newUser.save(newUser)
                  .then(data =>{
                         res.send(data);
@@ -80,8 +81,7 @@ exports.createUser = (req,res) => {
             
     }
 }
-
-   
+  
 exports.addFeedback = (req,res) => {
             let userExist = userDb.find({name : req.body.name})
             if(userExist){ 
@@ -95,55 +95,56 @@ exports.addFeedback = (req,res) => {
                      .catch(err => res.send(err))
             }
 }
-//see if user exist -> find the entity using id then find the feedback to edit using signature and update it.
+
 exports.updateFeedback = (req,res) => {
-    
+    if(req.params.code == 11){
+        entityDb.findOneAndUpdate(
+            {_id:req.params.id,"Feedbacks._id" : req.params.signature},
+            {$set : {'Feedbacks.$.Feed': req.body.content}}
+            ).then(data => {res.json(data)})
+            .catch(err => {res.send(err)})
+    }
 }
-      
+
 exports.getFeedStatus = (req,res) => {
     if(req.params.id == 11){
-        
-  }  
+    entityDb.find({_id:req.params.id,"Feedbacks.$._id": req.params.signature})
+                    .then(data => {res.send(data)})
+                    .catch(err =>{res.send(err)})
+}  
 }
 
 exports.viewAllFeed = (req,res) => {
     if(req.params.code == 11){
-        let toview = hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
-        for(let i = 0; i<toview.feedback.length; i++){
-            if(toview.feedback[i].status == 'Active'){
-                res.write(toview.feedback[i])
-        }
-     }
-     res.end();
+       entityDb.find({_id:req.params.id , 'Feedbacks.$.Feed' : 'Active' })
+       .then(data => {res.json(data)})
+       .catch(err => res.send(err))
   }  
 }
 
-
 exports.approveFeed = (req,res) => {
+    if(req.params.code == 00){
         entityDb.findOneAndUpdate(
             {_id:req.params.id, "Feedbacks._id" : req.params.signature},
             {$set : {'Feedbacks.$.status': "Active"}})
         .then(data => res.send(data))
         .catch(err => res.send(err))
     } 
-
+}
 
 exports.deleteFeedback = (req,res) => {
     if(req.params.code == 00){
-        let todelete =  hFunction.findTheEntity(req.params.m_id,db_entity.allEntity);
-        for(let i=0; i < todelete.feedback.length ; i++){
-            if(todelete.feedback[i].signature == req.params.signature){
-                todelete.feedback.splice(i,1);
-                res.send('Deleted Feedback Successfully.')
-            } else {
-                res.send('No records Found');
-            }
+        entityDb.findOneAndDelete(
+            {_id:req.params.id,"Feedbacks._id" : req.params.signature})
+            .then(data => res.send(data))
+            .catch(err => res.send(err))
         }
-}else{
-    res.send('You are not an Admin.')
 }
-    }
 
 exports.filterByCategory = (req,res) => {
    entityDb.find({Category:req.params.m_category})
+}
+
+exports.login = (req,res) => {
+   
 }
