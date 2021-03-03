@@ -1,7 +1,6 @@
-const {user} = require("./user_schema");
+const {user,userLogin} = require("./user_schema");
 
-module.exports = {
-    addUserValidation: async(req, res, next) => {
+exports.addUserValidation = async(req, res, next) => {
         const value = await user.validate(req.body)
         if(value.error) {
             res.json(value.error.details[0].message);
@@ -9,4 +8,13 @@ module.exports = {
             next();
         }
     }
-} 
+
+
+exports.loginValidation = async(req,res,next) => {
+        const value = await userLogin.validate(req.body)
+        if(value.error) {
+            res.json(value.error.details[0].message);
+        }else{
+            next();
+        }
+    }

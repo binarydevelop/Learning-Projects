@@ -11,10 +11,29 @@ const schema  = {
             .valid("Admin","User"),
         
         email : joi.string()
-                    .email(),
+                    .email()
+                    .min(6)
+                    .max(124),
                     
         password : joi.string()
                       .required()
+                      .min(6)
+                      .max(255)
+    }),
+
+    userLogin:  joi.object({
+        email: joi.string()
+                    .email()
+                    .min(6)
+                    .max(124),
+
+        password: joi.string()
+                    .required()
+                    .min(6)
+                    .max(255)
     })
+
 }
+
+
 module.exports = schema;    

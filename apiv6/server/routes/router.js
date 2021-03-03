@@ -2,7 +2,7 @@ const controller = require('../controllers/controller');
 const express= require('express');
 const router = express.Router();
 const { checkIfUserExist } = require('../utils/Helper_functions/functions')
-const { addUserValidation } = require('../validation/user/user_validation');
+const { addUserValidation , loginValidation } = require('../validation/user/user_validation');
 const { addEntityValidation } = require('../validation/entity/entity_validation');
 
 //API ROUTES
