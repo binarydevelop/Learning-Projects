@@ -98,10 +98,13 @@ exports.login = async(req,res) => {
                 if(!validPassword){
                     return res.status(400).send('Password is Incorrect.');
                 }else{
-                    res.send('Logged In');
+                    //create Token
+                    const token = jwt.sign({ _id: userExist._id }, process.env.SECRET_TOKEN);
+                    res.header('auth-token',token)
                 }
-        } 
+        }  
 }
+
 
 exports.addFeedback = (req,res) => {
             let userExist = userDb.find({name : req.body.name})
