@@ -2,22 +2,24 @@ const hFunction = require('../utils/Helper_functions/functions');
 let userDb = require('../models/user_model')
 let entityDb = require('../models/entity_model')
 const bcrypt = require('bcryptjs')
-const { checkIfUserExist } = require('../utils/Helper_functions/functions')
-exports.home = (req,res) => {
+const jwt = require('jsonwebtoken');
+exports.home = (req, res) => {
     res.send('works');
 }
 
-exports.getUsers = (req,res) => {
-    userDb.find()
-    .then(data => {
-        res.send(data)
-    })
-    .catch(err => {
-        res.status(500).send({message:err.message})
-    })
+exports.getUsers = async (req, res) => {
+    let data;
+    try {
+        data = await userDb.find()
+    }
+    catch(err) {
+        console.log(err)
+        return null
+    }
+    res.send(data)
 }
 
-exports.createEntity = (req,res) => {
+exports.createEntity = (req, res) => {
     //validate Request
     if(!req.body){
         res.status(400).send({ message : "Content can not be emtpy!"});
