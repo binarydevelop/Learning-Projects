@@ -15,6 +15,6 @@ exports.loginValidation = async(req,res,next) => {
         if(value.error) {
             res.json(value.error.details[0].message);
         }else{
-            next();
+             next();
         }
     }

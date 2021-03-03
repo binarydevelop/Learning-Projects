@@ -59,14 +59,13 @@ exports.getEntity = (req,res) => {
     } 
 }
 
-exports.createUser = async (req,res) => {
+exports.createUser = async(req,res) => {
     //validate Request
     if(!req.body){
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
-    checkIfUserExist();
-
+   
     if(req.params.code == 00){
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password,salt);
@@ -89,10 +88,9 @@ exports.createUser = async (req,res) => {
 
 exports.login = async(req,res) => {
     const userExist= await userDb.findOne({email : req.body.email})
-    console.log(userExist)
         if(!userExist){
             return res.status(400).send('Email Does not Exist')
-        } else {console.log('runs')
+        } else {
             //check for password
             const validPassword = bcrypt.compare(req.body.password , userExist.password)
                 if(!validPassword){
@@ -166,6 +164,3 @@ exports.filterByCategory = (req,res) => {
    entityDb.find({Category:req.params.m_category})
 }
 
-exports.login = (req,res) => {
-   
-}
