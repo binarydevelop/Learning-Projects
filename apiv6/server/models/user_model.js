@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 let userSchema = new mongoose.Schema({
     name :{
         type: String,
-        required :true
+        required:true
     },
     power :{
         type:String,
@@ -16,9 +16,9 @@ let userSchema = new mongoose.Schema({
     },
     password : {
         type: String,
-        required : true
+        required: true
     }
 },{timestamps:true})
 
-const userDb = mongoose.model('users',userSchema);
+const userDb = mongoose.model('users', userSchema);
 module.exports = userDb;
