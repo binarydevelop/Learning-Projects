@@ -2,7 +2,7 @@ const hFunction = require('../utils/Helper_functions/functions');
 let userDb = require('../models/user_model')
 let entityDb = require('../models/entity_model')
 const bcrypt = require('bcryptjs')
-
+const { checkIfUserExist } = require('../utils/Helper_functions/functions')
 exports.home = (req,res) => {
     res.send('works');
 }
@@ -65,6 +65,7 @@ exports.createUser = async (req,res) => {
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
+    checkIfUserExist();
 
     if(req.params.code == 00){
             const salt = await bcrypt.genSalt(10);
@@ -85,7 +86,23 @@ exports.createUser = async (req,res) => {
             
     }
 }
-  
+
+exports.login = async(req,res) => {
+    const userExist= await userDb.findOne({email : req.body.email})
+    console.log(userExist)
+        if(!userExist){
+            return res.status(400).send('Email Does not Exist')
+        } else {console.log('runs')
+            //check for password
+            const validPassword = bcrypt.compare(req.body.password , userExist.password)
+                if(!validPassword){
+                    return res.status(400).send('Password is Incorrect.');
+                }else{
+                    res.send('Logged In');
+                }
+        } 
+}
+
 exports.addFeedback = (req,res) => {
             let userExist = userDb.find({name : req.body.name})
             if(userExist){ 
