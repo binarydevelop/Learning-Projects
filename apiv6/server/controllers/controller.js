@@ -1,6 +1,7 @@
 const hFunction = require('../utils/helperFunctions/functions');
-let userDb = require('../models/userModel')
-let entityDb = require('../models/entityModel')
+const mongoose = require('mongoose');
+let userDb = mongoose.model('users')
+let entityDb = mongoose.model('entity');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 exports.home = (req, res) => {
@@ -8,12 +9,14 @@ exports.home = (req, res) => {
 }
 
 exports.getUsers = async (req, res) => {
-        await userDb.find()
-            .then(data => res.send(data))
-            .catch(err => {
-                res.send(err.message)
-            }) 
-        }
+        await userDb.find( (err,docs) => {
+            if(!err){
+                res.json({docs})
+            } else {
+                res.send(err.message);
+            }
+    })
+}
 
 
 exports.createEntity = (req, res) => {
@@ -80,7 +83,6 @@ exports.createUser = async(req,res) => {
 
 exports.login = async(req,res) => {
     const userExist= await userDb.findOne({email : req.body.email})
-    console.log(userExist)
         if(!userExist){
             return res.status(400).send('Email Does not Exist')
         } 
