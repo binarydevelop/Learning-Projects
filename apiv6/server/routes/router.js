@@ -7,7 +7,7 @@ const { addUserValidation , loginValidation } = require('../validation/user/user
 const { addEntityValidation } = require('../validation/entity/entity_validation');
 
 //API ROUTES
-router.get('/api', verifyToken, controller.home); //Testing Route
+router.get('/api', controller.home); //Testing Route
 router.get('/api/entity/:code', controller.getEntity) // View all Entities(00)
 router.get('/api/users/:code',controller.getUsers) //View all Users
 router.get('/api/feedstatus/:id/:signature/:code',controller.getFeedStatus)// View Feedback status
