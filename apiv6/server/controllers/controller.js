@@ -8,16 +8,13 @@ exports.home = (req, res) => {
 }
 
 exports.getUsers = async (req, res) => {
-    let data;
-    try {
-        data = await userDb.find()
-    }
-    catch(err) {
-        console.log(err)
-        return null
-    }
-    res.send(data)
-}
+        await userDb.find()
+            .then(data => res.send(data))
+            .catch(err => {
+                res.send(err.message)
+            }) 
+        }
+
 
 exports.createEntity = (req, res) => {
     //validate Request
@@ -25,7 +22,6 @@ exports.createEntity = (req, res) => {
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
-    if(req.params.code == 00) {
         const newEntity = new entityDb({
             Title : req.body.title,
             Category : req.body.category,
@@ -38,20 +34,16 @@ exports.createEntity = (req, res) => {
                  .catch(err => {
                     res.status(500).send({message:err.message})
                  })
-       
     } 
-}
 
 exports.deleteEntity = (req,res) => {
-   if(req.params.code == 00){
        entityDb.deleteOne({_id:req.params.id})
-                .then(res.send({entityDb}));
+                .then(res.send({message : "Deleted Successfully."}));
    }
-}
 
-exports.getEntity = (req,res) => {
-    if(req.params.code == 00){
-        entityDb.find()
+
+exports.getEntity = async (req,res) => {
+       await entityDb.find()
         .then(data => {
             res.send(data)
         })
@@ -59,7 +51,7 @@ exports.getEntity = (req,res) => {
             res.send(err)
         })
     } 
-}
+
 
 exports.createUser = async(req,res) => {
     //validate Request
@@ -67,8 +59,6 @@ exports.createUser = async(req,res) => {
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
-   
-    if(req.params.code == 00){
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(req.body.password,salt);
 
@@ -86,7 +76,7 @@ exports.createUser = async(req,res) => {
                     })
             
     }
-}
+
 
 exports.login = async(req,res) => {
     const userExist= await userDb.findOne({email : req.body.email})
@@ -108,8 +98,9 @@ exports.login = async(req,res) => {
             }
         } 
 
-exports.addFeedback = (req,res) => {
-            let userExist = userDb.find({name : req.body.name})
+exports.addFeedback = (req,res) => {  
+            //let userExist = userDb.find( { $and: [ {_id : req.body.id } , {name : req.body.id} ] } )
+            let userExist = userDb.find({_id: req.body.id});
             if(userExist){ 
                 let feedbackObj = {Feed : req.body.content,
                                    by: req.body.name,
