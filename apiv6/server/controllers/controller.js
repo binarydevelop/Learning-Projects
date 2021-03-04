@@ -90,23 +90,23 @@ exports.createUser = async(req,res) => {
 
 exports.login = async(req,res) => {
     const userExist= await userDb.findOne({email : req.body.email})
+    console.log(userExist)
         if(!userExist){
             return res.status(400).send('Email Does not Exist')
         } 
-        if(userExist.power == "Admin"){
-            const adminToken = jwt.sign({power: userExist.power},process.env.SECRET_TOKEN)
-            res.header('admin-key',adminToken).send(adminToken);
-        }
+      
         const validPassword = bcrypt.compare(req.body.password , userExist.password)
             if(!validPassword){
                 return res.status(400).send('Password is Incorrect.');
             } else {
                  const token = jwt.sign({ _id: userExist._id},process.env.SECRET_TOKEN)
                  res.header('auth-token',token).send(token);
+                    if(userExist.power == "Admin"){
+                        const adminToken = jwt.sign({power: userExist.power},process.env.SECRET_TOKEN)
+                        res.header('admin-key',adminToken).send(adminToken);
                 }
+            }
         } 
-
-
 
 exports.addFeedback = (req,res) => {
             let userExist = userDb.find({name : req.body.name})
