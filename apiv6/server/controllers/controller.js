@@ -1,6 +1,6 @@
-const hFunction = require('../utils/Helper_functions/functions');
-let userDb = require('../models/user_model')
-let entityDb = require('../models/entity_model')
+const hFunction = require('../utils/helperFunctions/functions');
+let userDb = require('../models/userModel')
+let entityDb = require('../models/entityModel')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 exports.home = (req, res) => {

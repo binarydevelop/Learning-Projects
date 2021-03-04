@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const entityDb = require('../models/user_model')
+const entityDb = require('../models/userModel')
 
 exports.verifyToken = (req,res,next) => {
     const token = req.header('auth-token'); 

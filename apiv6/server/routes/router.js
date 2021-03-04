@@ -1,10 +1,10 @@
 const controller = require('../controllers/controller');
-const express= require('express');
+const express = require('express');
 const router = express.Router();
 const {verifyToken, checkPower} = require('../Middlewares/authMiddleware');
-const { checkIfUserExist } = require('../utils/Helper_functions/functions')
-const { addUserValidation , loginValidation } = require('../validation/user/user_validation');
-const { addEntityValidation } = require('../validation/entity/entity_validation');
+const { checkIfUserExist } = require('../utils/helperFunctions/functions')
+const { addUserValidation , loginValidation } = require('../validation/user/userValidation');
+const { addEntityValidation } = require('../validation/entity/entityValidation');
 
 //API ROUTES
 router.get('/api',verifyToken, checkPower, controller.home); //Testing Route
