@@ -138,21 +138,19 @@ exports.getFeedStatus = (req,res) => {
 }
 
 exports.viewAllFeed = (req,res) => {
-    if(req.params.code == 11){
-       entityDb.find({_id:req.params.id , 'Feedbacks.$.Feed' : 'Active' })
+       entityDb.find( { '_id':req.params.id , 'Feedbacks.$.Feed' : 'Active' } )
        .then(data => {res.json(data)})
        .catch(err => res.send(err))
   }  
-}
 
 exports.approveFeed = (req,res) => {
     try{
         entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
         { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
-        res.send({message:'Approved Feedback.'})
+        res.send( { message:'Approved Feedback.' } )
     } 
     catch(err){
-        res.send({message: err.message})
+        res.send( { message: err.message } )
     }             
 } 
 
