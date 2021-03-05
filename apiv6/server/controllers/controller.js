@@ -86,15 +86,18 @@ exports.login = async(req,res) => {
         if(!userExist) {
             return res.status(400).send( 'Email Does not Exist' )
         } 
-        try{ const validPassword = await bcrypt.compare( req.body.password , userExist.password )
+        try{ 
+            const validPassword = await bcrypt.compare( req.body.password , userExist.password )
             if( !validPassword ) {
                 return res.status(400).send( 'Password is Incorrect.' );
             } else {
                  const token = jwt.sign( { _id: userExist._id}, process.env.SECRET_TOKEN )
-                 res.header( 'auth-token', token ).send( token );
-                    if(userExist.power == "Admin") {
+                    if(userExist.power === "Admin") { 
                         const adminToken = jwt.sign( {}, process.env.SECRET_TOKEN )
-                        res.header( 'admin-key', adminToken );
+                        res.setHeader( 'admin-key', adminToken );
+                        res.header( 'auth-token', token ).send( token );
+                }else{
+                        res.header( 'auth-token', token ).send( token );
                 }
             } }
         catch(error) {
