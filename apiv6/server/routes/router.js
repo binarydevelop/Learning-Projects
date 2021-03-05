@@ -20,7 +20,7 @@ router.post('/api/create/user', verifyToken, addUserValidation, checkIfUserExist
 router.post('/api/login', loginValidation, controller.login); //checked
 
 router.put('/api/add/feedback/:id', verifyToken, controller.addFeedback); // checked
-router.put('/api/approve/feedback/:id/:signature/:code', verifyToken, checkPower, controller.approveFeed); //checked
+router.put('/api/approve/feedback/:id/:signature', verifyToken, checkPower, controller.approveFeed); //checked
 router.put('/api/update/:id/:signature/:code', verifyToken, controller.updateFeedback); // Update feedback [ {"updateit":"This should update"} ]
 
 router.delete('/api/delete/entity/:id', verifyToken, checkPower, controller.deleteEntity); // checked

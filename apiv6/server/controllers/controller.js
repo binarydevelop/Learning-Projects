@@ -118,17 +118,19 @@ exports.addFeedback = async (req,res) => {
 }
 
 exports.updateFeedback = (req,res) => {
-    if(req.params.code == 11){
+    try{
         entityDb.findOneAndUpdate(
-            {_id:req.params.id,"Feedbacks._id" : req.params.signature},
-            {$set : {'Feedbacks.$.Feed': req.body.content}}
-            ).then(data => {res.json(data)})
-            .catch(err => {res.send(err)})
+            { '_id':req.params.id,'Feedbacks._id' : req.params.signature },
+            { $set : { 'Feedbacks.$.Feed': req.body.content } } ).exec();
     }
+    catch(error) {
+        res.send( { message: error.message } )
+    } 
 }
 
+
 exports.getFeedStatus = (req,res) => {
-    if(req.params.id == 11){
+    if(req.params.id == 11) {
     entityDb.find({_id:req.params.id,"Feedbacks.$._id": req.params.signature})
                     .then(data => {res.send(data)})
                     .catch(err =>{res.send(err)})
@@ -144,11 +146,15 @@ exports.viewAllFeed = (req,res) => {
 }
 
 exports.approveFeed = (req,res) => {
+    try{
         entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
-            { $set : { 'Feedbacks.$.status': "Active" } } )
-                .then( data => res.send(data) )
-                .catch( err => res.send(err) )
+        { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
+        res.send({message:'Approved Feedback.'})
     } 
+    catch(err){
+        res.send({message: err.message})
+    }             
+} 
 
 
 exports.deleteFeedback = (req,res) => {
@@ -164,6 +170,6 @@ exports.deleteFeedback = (req,res) => {
 
 
 exports.filterByCategory = (req,res) => {
-   entityDb.find({Category:req.params.m_category})
+   entityDb.find({Category:req.params.m_category}).exec();
 }
 
