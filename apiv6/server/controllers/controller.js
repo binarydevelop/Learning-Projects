@@ -108,7 +108,7 @@ exports.login = async(req,res) => {
 exports.addFeedback = async (req,res) => {  
             let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
             if(userExist) { 
-                if(userExist[0].power == 'Admin'){ 
+                if(userExist[0].power === 'Admin'){ 
                     res.send( {  message : 'Admins cannot Post Feedback.' } )
                     return;
                 }
@@ -124,7 +124,13 @@ exports.addFeedback = async (req,res) => {
                 res.send( { message:'User Does not exist.' })}
 }
 
-exports.updateFeedback = (req,res) => {
+exports.updateFeedback = async(req,res) => {
+    let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
+            if(userExist) { 
+                if(userExist[0].power == 'Admin'){ 
+                    res.send( {  message : 'Admins cannot Update Feedback.' } )
+                    return;
+                }
     try{
         entityDb.findOneAndUpdate(
             { '_id':req.params.id,'Feedbacks._id' : req.params.signature },
@@ -132,9 +138,9 @@ exports.updateFeedback = (req,res) => {
     }
     catch(error) {
         res.send( { message: error.message } )
-    } 
+        } 
+    }
 }
-
 
 exports.getFeedStatus = (req,res) => {
     entityDb.find( { _id:req.params.id, "Feedbacks.$._id": req.params.signature } )
