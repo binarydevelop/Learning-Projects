@@ -165,10 +165,10 @@ exports.viewAllFeed = (req,res) => {
     }
   }  
 
-exports.approveFeed = (req,res) => {
+exports.approveFeed = async(req,res) => {
     try{
-        entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
-        { $set : { 'Feedbacks.status': "Active" } } ).exec();
+        await entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
+        { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
         res.send( { message:'Approved Feedback.' } )
     } 
     catch(err){
