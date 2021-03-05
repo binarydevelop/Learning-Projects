@@ -60,7 +60,7 @@ exports.getEntity = async (req,res) => {
 
 exports.createUser = async(req,res) => {
     //validate Request
-    if(!req.body){
+    if(!req.body) {
         res.status(400).send({ message : "Content can not be emtpy!"});
         return;
     }
@@ -84,23 +84,25 @@ exports.createUser = async(req,res) => {
 
 
 exports.login = async(req,res) => {
-    const userExist= await userDb.findOne({email : req.body.email})
-        if(!userExist){
-            return res.status(400).send('Email Does not Exist')
+    const userExist= await userDb.findOne( { email : req.body.email } ).exec();
+        if(!userExist) {
+            return res.status(400).send( 'Email Does not Exist' )
         } 
-      
-        const validPassword = bcrypt.compare(req.body.password , userExist.password)
-            if(!validPassword){
-                return res.status(400).send('Password is Incorrect.');
+        try{ const validPassword = await bcrypt.compare( req.body.password , userExist.password )
+            if( !validPassword ) {
+                return res.status(400).send( 'Password is Incorrect.' );
             } else {
-                 const token = jwt.sign({ _id: userExist._id},process.env.SECRET_TOKEN)
-                 res.header('auth-token',token).send(token);
-                    if(userExist.power == "Admin"){
-                        const adminToken = jwt.sign({power: userExist.power},process.env.SECRET_TOKEN)
-                        res.header('admin-key',adminToken).send(adminToken);
+                 const token = jwt.sign( { _id: userExist._id}, process.env.SECRET_TOKEN )
+                 res.header( 'auth-token', token ).send( token );
+                    if(userExist.power == "Admin") {
+                        const adminToken = jwt.sign( {}, process.env.SECRET_TOKEN )
+                        res.header( 'admin-key', adminToken );
                 }
-            }
-        } 
+            } }
+        catch(error) {
+            res.send( {message:error.message} )
+        }
+    } 
 
 exports.addFeedback = async (req,res) => {  
             let userExist = await userDb.find({ _id: req.body.id,  name : req.body.name  }).exec();
@@ -131,7 +133,7 @@ exports.updateFeedback = (req,res) => {
 
 exports.getFeedStatus = (req,res) => {
     if(req.params.id == 11) {
-    entityDb.find({_id:req.params.id,"Feedbacks.$._id": req.params.signature})
+    entityDb.find( { _id:req.params.id, "Feedbacks.$._id": req.params.signature } )
                     .then(data => {res.send(data)})
                     .catch(err =>{res.send(err)})
 }  

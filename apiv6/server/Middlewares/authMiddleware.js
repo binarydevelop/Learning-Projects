@@ -19,8 +19,13 @@ exports.checkPower = (req,res,next) => {
     const adminToken = req.header('admin-key');
     if(!adminToken) {
         res.status(401).send('You cannot access this part.')
-    }
-    else{
+    }try{
+        const isAdmin = jwt.verify(adminToken, process.env.SECRET_TOKEN);
+        console.log(isAdmin);
+        req.power = isAdmin; 
         next();
+    }catch(err){
+            console.log(err);
+    }
+    
     } 
-}
