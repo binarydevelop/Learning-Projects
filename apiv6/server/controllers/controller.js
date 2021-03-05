@@ -39,9 +39,14 @@ exports.createEntity = (req, res) => {
                  })
     } 
 
-exports.deleteEntity = (req,res) => {
-       entityDb.deleteOne( {_id:req.params.id} )
-                .then( res.send( {message : "Deleted Successfully."} ) );
+exports.deleteEntity = async(req,res) => {
+    let userExist = await userDb.find( { _id: req.body.id } ).exec();
+            if(userExist[0].power === 'Admin') { 
+                entityDb.deleteOne( {_id:req.params.id} ).exec();
+                    res.send({message: 'Deleted Successfully.'})
+                } else {
+                    res.send({message: 'You are not an Admin.'})
+                }
    }
 
 
@@ -138,7 +143,7 @@ exports.updateFeedback = async(req,res) => {
     }
     catch(error) {
         res.send( { message: error.message } )
-        } 
+    } 
     }
 }
 
@@ -150,15 +155,20 @@ exports.getFeedStatus = (req,res) => {
 
 
 exports.viewAllFeed = (req,res) => {
-       entityDb.find( { '_id':req.params.id , 'Feedbacks.$.Feed' : 'Active' } )
-       .then(data => { res.json(data) } )
-       .catch(err => res.send(err) )
+    try{
+        entityDb.find( { '_id' :req.params.id , 'Feedbacks.status' : 'Active' } ).exec( (err,docs) => {
+            res.json( {docs} );
+        });  
+    }
+    catch(err) {
+        res.send({ message: err.message})
+    }
   }  
 
 exports.approveFeed = (req,res) => {
     try{
         entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
-        { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
+        { $set : { 'Feedbacks.status': "Active" } } ).exec();
         res.send( { message:'Approved Feedback.' } )
     } 
     catch(err){
