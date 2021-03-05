@@ -15,9 +15,9 @@ router.get('/api/viewfeedbacks/:id', verifyToken, controller.viewAllFeed)//check
 router.get('/api/filter/:m_category', verifyToken, controller.filterByCategory) //cehcked
 
 
-router.post('/api/create/entity', verifyToken, addEntityValidation, controller.createEntity); //Checked
-router.post('/api/create/user', verifyToken, addUserValidation, checkIfUserExist, controller.createUser); //checked
-router.post('/api/login', loginValidation, controller.login); //checked
+router.post('/api/create/entity', verifyToken, addEntityValidation, controller.createEntity); 
+router.post('/api/create/user', verifyToken, addUserValidation, checkIfUserExist, controller.createUser); 
+router.post('/api/login', loginValidation, controller.login); 
 
 router.put('/api/add/feedback/:id', verifyToken, controller.addFeedback); // checked
 router.put('/api/approve/feedback/:id/:signature', verifyToken, checkPower, controller.approveFeed); //checked

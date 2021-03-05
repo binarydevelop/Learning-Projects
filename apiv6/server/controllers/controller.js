@@ -108,8 +108,12 @@ exports.login = async(req,res) => {
 exports.addFeedback = async (req,res) => {  
             let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
             if(userExist) { 
-                let feedbackObj = { Feed : req.body.content,
-                                    by: userExist[0].name,
+                if(userExist[0].power == 'Admin'){ 
+                    res.send( {  message : 'Admins cannot Post Feedback.' } )
+                    return;
+                }
+                let feedbackObj = { Feed : req.body.content, 
+                                    by: userExist.name,
                                     status: 'Inactive' }
                 entityDb.findOneAndUpdate(
                     { '_id': req.params.id },

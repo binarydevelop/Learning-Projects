@@ -11,7 +11,7 @@ exports.verifyToken = (req,res,next) => {
         req.user = verified; 
         next();
     }catch(err){
-            console.log(err);
+            res.send({message: err.message});
     }
 }
 
@@ -21,7 +21,6 @@ exports.checkPower = (req,res,next) => {
         res.status(401).send('You cannot access this part.')
     }try{
         const isAdmin = jwt.verify(adminToken, process.env.SECRET_TOKEN);
-        console.log(isAdmin);
         req.power = isAdmin; 
         next();
     }catch(err){
