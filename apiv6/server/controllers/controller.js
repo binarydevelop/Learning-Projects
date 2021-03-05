@@ -4,6 +4,7 @@ let userDb = mongoose.model('users')
 let entityDb = mongoose.model('entity');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
+
 exports.home = (req, res) => {
     res.send('works');
 }
@@ -17,7 +18,6 @@ exports.getUsers = async (req, res) => {
             }
     })
 }
-
 
 exports.createEntity = (req, res) => {
     //validate Request
@@ -41,7 +41,9 @@ exports.createEntity = (req, res) => {
 
 exports.deleteEntity = (req,res) => {
        entityDb.deleteOne({_id:req.params.id})
-                .then(res.send({message : "Deleted Successfully."}));
+                .then( res.send(
+                        {message : "Deleted Successfully."}
+                        ));
    }
 
 
@@ -102,17 +104,18 @@ exports.login = async(req,res) => {
 
 exports.addFeedback = (req,res) => {  
             //let userExist = userDb.find( { $and: [ {_id : req.body.id } , {name : req.body.id} ] } )
-            let userExist = userDb.find({_id: req.body.id});
-            if(userExist){ 
-                let feedbackObj = {Feed : req.body.content,
-                                   by: req.body.name,
-                                   status: 'Inactive'}
+            let userExist = userDb.find({ _id: req.body.id,  name : req.body.name  });
+            if(userExist) { 
+                let feedbackObj = { Feed : req.body.content,
+                                    by: req.body.name,
+                                    status: 'Inactive' }
                 entityDb.findOneAndUpdate(
-                    {_id:req.params.id},
-                    {$push : {Feedbacks :feedbackObj} },
-                    ).then(data => res.send(data))
-                     .catch(err => res.send(err))
-            }
+                    { '_id': req.params.id },
+                    { $push: {Feedbacks: feedbackObj } } )
+                        .then(data => res.send(data))
+                        .catch(err => res.send(err))
+            } else { 
+                res.send( { message:'User Does not exist.' })}
 }
 
 exports.updateFeedback = (req,res) => {
@@ -142,23 +145,20 @@ exports.viewAllFeed = (req,res) => {
 }
 
 exports.approveFeed = (req,res) => {
-    if(req.params.code == 00){
-        entityDb.findOneAndUpdate(
-            {_id:req.params.id, "Feedbacks._id" : req.params.signature},
-            {$set : {'Feedbacks.$.status': "Active"}})
-        .then(data => res.send(data))
-        .catch(err => res.send(err))
+        entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
+            { $set : { 'Feedbacks.$.status': "Active" } } )
+                .then( data => res.send(data) )
+                .catch( err => res.send(err) )
     } 
-}
+
 
 exports.deleteFeedback = (req,res) => {
-    if(req.params.code == 00){
-        entityDb.findOneAndDelete(
-            {_id:req.params.id,"Feedbacks._id" : req.params.signature})
-            .then(data => res.send(data))
-            .catch(err => res.send(err))
-        }
-}
+    entityDb.findOneAndDelete( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
+            { $pull : { Feedbacks: { _id : req.params.signature }  } } )
+                .then( data => res.send(data) )
+                .catch( err => res.send(err) )
+    } 
+
 
 exports.filterByCategory = (req,res) => {
    entityDb.find({Category:req.params.m_category})
