@@ -102,12 +102,11 @@ exports.login = async(req,res) => {
             }
         } 
 
-exports.addFeedback = (req,res) => {  
-            //let userExist = userDb.find( { $and: [ {_id : req.body.id } , {name : req.body.id} ] } )
-            let userExist = userDb.find({ _id: req.body.id,  name : req.body.name  });
+exports.addFeedback = async (req,res) => {  
+            let userExist = await userDb.find({ _id: req.body.id,  name : req.body.name  }).exec();
             if(userExist) { 
                 let feedbackObj = { Feed : req.body.content,
-                                    by: req.body.name,
+                                    by: userExist[0].name,
                                     status: 'Inactive' }
                 entityDb.findOneAndUpdate(
                     { '_id': req.params.id },
@@ -153,11 +152,15 @@ exports.approveFeed = (req,res) => {
 
 
 exports.deleteFeedback = (req,res) => {
-    entityDb.findOneAndDelete( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
-            { $pull : { Feedbacks: { _id : req.params.signature }  } } )
-                .then( data => res.send(data) )
-                .catch( err => res.send(err) )
-    } 
+    try{
+        entityDb.findOneAndDelete( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
+        { $pull : { Feedbacks: { _id : req.params.signature }  } } ).exec();
+        res.send({message:'Deleted Successfully.'});
+    }
+    catch(err){
+        res.send({message: err.message})
+    }        
+} 
 
 
 exports.filterByCategory = (req,res) => {
