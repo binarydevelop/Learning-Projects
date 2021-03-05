@@ -22,7 +22,7 @@ exports.getUsers = async (req, res) => {
 exports.createEntity = (req, res) => {
     //validate Request
     if(!req.body){
-        res.status(400).send({ message : "Content can not be emtpy!"});
+        res.status(400).send({ message : "Content can not be emtpy!" });
         return;
     }
         const newEntity = new entityDb({
@@ -31,19 +31,17 @@ exports.createEntity = (req, res) => {
             Feedbacks: []
         });
         newEntity.save(newEntity)
-                 .then(data =>{
+                 .then(data => {
                       res.send(data);
-                    })
+                    } )
                  .catch(err => {
-                    res.status(500).send({message:err.message})
+                    res.status(500).send( {message:err.message} )
                  })
     } 
 
 exports.deleteEntity = (req,res) => {
-       entityDb.deleteOne({_id:req.params.id})
-                .then( res.send(
-                        {message : "Deleted Successfully."}
-                        ));
+       entityDb.deleteOne( {_id:req.params.id} )
+                .then( res.send( {message : "Deleted Successfully."} ) );
    }
 
 
@@ -61,23 +59,23 @@ exports.getEntity = async (req,res) => {
 exports.createUser = async(req,res) => {
     //validate Request
     if(!req.body) {
-        res.status(400).send({ message : "Content can not be emtpy!"});
+        res.status(400).send( { message : "Content can not be emtpy!"} );
         return;
     }
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(req.body.password,salt);
+            const hashedPassword = await bcrypt.hash( req.body.password, salt );
 
             let newUser= new userDb({
                 name : req.body.name,
                 power: req.body.power,
                 email: req.body.email,
-                password: hashedPassword});
+                password: hashedPassword });
          newUser.save(newUser)
                  .then(data =>{
                         res.send(data);
                     })
                  .catch(err => {
-                        res.status(500).send({message:err.message})
+                        res.status(500).send( {message:err.message} )
                     })
             
     }
@@ -105,7 +103,7 @@ exports.login = async(req,res) => {
     } 
 
 exports.addFeedback = async (req,res) => {  
-            let userExist = await userDb.find({ _id: req.body.id,  name : req.body.name  }).exec();
+            let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
             if(userExist) { 
                 let feedbackObj = { Feed : req.body.content,
                                     by: userExist[0].name,
@@ -132,17 +130,16 @@ exports.updateFeedback = (req,res) => {
 
 
 exports.getFeedStatus = (req,res) => {
-    if(req.params.id == 11) {
     entityDb.find( { _id:req.params.id, "Feedbacks.$._id": req.params.signature } )
-                    .then(data => {res.send(data)})
-                    .catch(err =>{res.send(err)})
+                    .then(data => {res.send(data) } )
+                    .catch(err =>{res.send(err) } )
 }  
-}
+
 
 exports.viewAllFeed = (req,res) => {
        entityDb.find( { '_id':req.params.id , 'Feedbacks.$.Feed' : 'Active' } )
-       .then(data => {res.json(data)})
-       .catch(err => res.send(err))
+       .then(data => { res.json(data) } )
+       .catch(err => res.send(err) )
   }  
 
 exports.approveFeed = (req,res) => {
@@ -170,6 +167,6 @@ exports.deleteFeedback = (req,res) => {
 
 
 exports.filterByCategory = (req,res) => {
-   entityDb.find({Category:req.params.m_category}).exec();
+   entityDb.find( {Category:req.params.m_category} ).exec();
 }
 
