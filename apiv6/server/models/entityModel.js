@@ -16,5 +16,5 @@ let entitySchema=new mongoose.Schema({
         }]
 },{timestamps:true})
 
-const entityDb = mongoose.model('entity',entitySchema);
+const entityDb = mongoose.model('entities',entitySchema);
 module.exports = entityDb;

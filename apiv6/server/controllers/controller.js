@@ -1,7 +1,7 @@
 const hFunction = require('../utils/helperFunctions/functions');
 const mongoose = require('mongoose');
-let userDb = mongoose.model('users')
-let entityDb = mongoose.model('entity');
+const entityDb = require('../models/entityModel');
+const userDb = require('../models/userModel');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 
@@ -112,19 +112,19 @@ exports.login = async(req,res) => {
 
 exports.addFeedback = async (req,res) => {  
             let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
-            if(userExist) { 
-                if(userExist[0].power === 'Admin'){ 
+            if(userExist.length>0) { 
+                if(userExist[0].power == 'Admin'){ 
                     res.send( {  message : 'Admins cannot Post Feedback.' } )
                     return;
                 }
                 let feedbackObj = { Feed : req.body.content, 
-                                    by: userExist.name,
+                                    by: userExist[0].name,
                                     status: 'Inactive' }
                 entityDb.findOneAndUpdate(
                     { '_id': req.params.id },
                     { $push: {Feedbacks: feedbackObj } } )
                         .then(data => res.send(data))
-                        .catch(err => res.send(err))
+                        .catch(err => res.send(err.message))
             } else { 
                 res.send( { message:'User Does not exist.' })}
 }
@@ -156,7 +156,7 @@ exports.getFeedStatus = (req,res) => {
 
 exports.viewAllFeed = (req,res) => {
     try{
-        entityDb.find( { '_id' :req.params.id , 'Feedbacks.status' : 'Active' } ).exec( (err,docs) => {
+        entityDb.find( { '_id': req.params.id , 'Feedbacks.status' : 'Active' } ).exec( (err,docs) => {
             res.json( {docs} );
         });  
     }
@@ -166,22 +166,30 @@ exports.viewAllFeed = (req,res) => {
   }  
 
 exports.approveFeed = async(req,res) => {
-    try{
-        await entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
-        { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
-        res.send( { message:'Approved Feedback.' } )
-    } 
-    catch(err){
-        res.send( { message: err.message } )
-    }             
+    let userExist = await userDb.find( { _id: req.body.id } ).exec();
+    if(userExist) { 
+        if(userExist[0].power === 'Admin'){ 
+            try{
+                await entityDb.findOneAndUpdate( { '_id': req.params.id, 'Feedbacks._id': req.params.signature },
+                { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
+                res.send( { message:'Approved Feedback.' } )
+            } 
+            catch(err){
+                res.send( { message: err.message } )
+            } 
+        } else {
+            res.send( {  message : 'Users cannot Update Feedback.' } )
+        }
+    }
+               
 } 
 
 
-exports.deleteFeedback = (req,res) => {
+exports.deleteFeedback = async (req,res) => {
     try{
-        entityDb.findOneAndDelete( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
+        await entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
         { $pull : { Feedbacks: { _id : req.params.signature }  } } ).exec();
-        res.send({message:'Deleted Successfully.'});
+        res.send( { message:'Deleted Successfully.' });
     }
     catch(err){
         res.send({message: err.message})
