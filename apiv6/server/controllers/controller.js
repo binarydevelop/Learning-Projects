@@ -5,26 +5,31 @@ const userDb = require('../models/userModel');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 
-exports.home = (req, res) => {
-    res.send('works');
+
+exports.home = async(req, res) => {
+    res.send('Works.')
 }
 
 exports.getUsers = async (req, res) => {
-        await userDb.find( (err,docs) => {
+    try{
+        await userDb.find( (err, docs) => {
             if(!err){
-                res.json({docs})
+                res.send( {docs} )
             } else {
-                res.send(err.message);
+                throw new Error('Error Getting Users.')
             }
-    })
+        })
+    }
+    catch(err) {
+        res.send({error: err.message});
+    }
 }
 
 exports.createEntity = (req, res) => {
-    //validate Request
-    if(!req.body){
-        res.status(400).send({ message : "Content can not be emtpy!" });
-        return;
-    }
+    try{
+        if(!req.body){
+            throw new Error('Content cannot be Empty.');
+        }
         const newEntity = new entityDb({
             Title : req.body.title,
             Category : req.body.category,
@@ -35,160 +40,178 @@ exports.createEntity = (req, res) => {
                       res.send(data);
                     } )
                  .catch(err => {
-                    res.status(500).send( {message:err.message} )
+                    res.status(500).send( {Error:err.message} )
                  })
-    } 
+   }catch(error) {
+        res.send({error: err.message})
+    }
+} 
 
-exports.deleteEntity = async(req,res) => {
-    let userExist = await userDb.find( { _id: req.body.id } ).exec();
-            if(userExist[0].power === 'Admin') { 
-                entityDb.deleteOne( {_id:req.params.id} ).exec();
-                    res.send({message: 'Deleted Successfully.'})
-                } else {
-                    res.send({message: 'You are not an Admin.'})
-                }
-   }
-
-
-exports.getEntity = async (req,res) => {
-       await entityDb.find()
-        .then(data => {
-            res.send(data)
+exports.deleteEntity = async(req, res) => {
+    try{
+        entityDb.deleteOne( {_id:req.body.id}, (err,doc) => {
+            if(err) {
+                console.log(err);
+                throw new Error('Error Deleting Entity.')
+            } else {
+                res.send({message: 'Deleted Successfully.'})
+            }
         })
-        .catch(err => {
-            res.send(err)
+    }
+    catch(err){
+        res.send({Error:err.message})
+    }
+}             
+   
+exports.getEntity = async(req, res) => {
+    try{
+        await entityDb.find({}, (err, doc) => {
+            res.send({doc})
         })
-    } 
-
+        if(err){
+            throw new Error('Trouble Getting Entites.')
+        }
+    }
+    catch(err) {
+        res.send({Error:err.message});
+    }  
+} 
 
 exports.createUser = async(req,res) => {
-    //validate Request
-    if(!req.body) {
-        res.status(400).send( { message : "Content can not be emtpy!"} );
-        return;
-    }
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash( req.body.password, salt );
+    try{
+        if(!req.body) {
+            throw new Error('Content Cannot be empty.')
+        }
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash( req.body.password, salt );
 
-            let newUser= new userDb({
-                name : req.body.name,
-                power: req.body.power,
-                email: req.body.email,
-                password: hashedPassword });
-         newUser.save(newUser)
-                 .then(data =>{
-                        res.send(data);
-                    })
-                 .catch(err => {
-                        res.status(500).send( {message:err.message} )
-                    })
-            
-    }
+        let newUser= new userDb({
+            name : req.body.name,
+            power: req.body.power,
+            email: req.body.email,
+            password: hashedPassword });
 
+        newUser.save(newUser)
+               .then(data =>{
+                    res.send(data);
+                })
+               .catch(err => {
+                    res.send( {message:err.message} )
+                })
+        }
+    catch(err){
+        res.send(err.message);
+    } 
+}
 
-exports.login = async(req,res) => {
+exports.login = async(req, res) => {
     const userExist= await userDb.findOne( { email : req.body.email } ).exec();
         if(!userExist) {
             return res.status(400).send( 'Email Does not Exist' )
         } 
         try{ 
             const validPassword = await bcrypt.compare( req.body.password , userExist.password )
-            if( !validPassword ) {
-                return res.status(400).send( 'Password is Incorrect.' );
-            } else {
-                 const token = jwt.sign( { _id: userExist._id}, process.env.SECRET_TOKEN )
-                    if(userExist.power === "Admin") { 
-                        const adminToken = jwt.sign( {}, process.env.SECRET_TOKEN )
-                        res.setHeader( 'admin-key', adminToken );
-                        res.header( 'auth-token', token ).send( token );
-                }else{
-                        res.header( 'auth-token', token ).send( token );
+                if( !validPassword ) {
+                    return res.status(400).send( 'Password is Incorrect.' );
+                } else {
+                    const payload = {
+                        email: userExist.email,
+                        power: userExist.power
+                    }           
+                 const token = jwt.sign( payload, process.env.SECRET_TOKEN )
+                        res.send( {token} );
                 }
-            } }
+            } 
         catch(error) {
-            res.send( {message:error.message} )
+            res.send( {error:error.message} )
         }
     } 
 
-exports.addFeedback = async (req,res) => {  
-            let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
+exports.addFeedback = async(req, res) => { 
+    try{
+        let userExist = await userDb.find( { email: req.user.email } ).exec();
             if(userExist.length>0) { 
-                if(userExist[0].power == 'Admin'){ 
-                    res.send( {  message : 'Admins cannot Post Feedback.' } )
-                    return;
-                }
                 let feedbackObj = { Feed : req.body.content, 
                                     by: userExist[0].name,
                                     status: 'Inactive' }
                 entityDb.findOneAndUpdate(
-                    { '_id': req.params.id },
+                    { '_id': req.body.id },
                     { $push: {Feedbacks: feedbackObj } } )
                         .then(data => res.send(data))
                         .catch(err => res.send(err.message))
             } else { 
-                res.send( { message:'User Does not exist.' })}
+                res.send( { message:'User Does not exist.' }
+            )}
+        }
+    catch(err){
+        res.send({Error:err.message})
+    }         
 }
 
-exports.updateFeedback = async(req,res) => {
-    let userExist = await userDb.find( { _id: req.body.id,  name : req.body.name  } ).exec();
-            if(userExist) { 
-                if(userExist[0].power == 'Admin'){ 
-                    res.send( {  message : 'Admins cannot Update Feedback.' } )
-                    return;
-                }
-    try{
-        entityDb.findOneAndUpdate(
-            { '_id':req.params.id,'Feedbacks._id' : req.params.signature },
-            { $set : { 'Feedbacks.$.Feed': req.body.content } } ).exec();
-    }
+exports.updateFeedback = async(req, res) => {
+    let userExist = await userDb.find( { email: req.user.email } ).exec();
+    if(userExist.length>0){
+        try{
+            entityDb.findOneAndUpdate(
+               { '_id': req.body.id, 'Feedbacks._id': req.body.signature },
+               { $set : { 'Feedbacks.$.Feed': req.body.content } }, (err, doc) => {
+                   if(err){
+                       throw new Error('Cannot Update Feedback.')
+                   }else{
+                       res.send({message: 'Updated Successfully.'})
+                   }
+               })
+       }
     catch(error) {
         res.send( { message: error.message } )
-    } 
+        } 
     }
 }
 
-exports.getFeedStatus = (req,res) => {
-    entityDb.find( { _id:req.params.id, "Feedbacks.$._id": req.params.signature } )
-                    .then(data => {res.send(data) } )
-                    .catch(err =>{res.send(err) } )
-}  
 
+exports.getFeed = async(req, res) => {
+    try{await entityDb.aggregate([
+        {$project: { Feedbacks: {
+                                  $filter: {
+                                          input: "$Feedbacks",
+                                          as: "feedbacks",
+                                          cond: {
+                  $eq: ["$$feedbacks.status", "Inactive" ]}}}}}]).exec((err,doc) => {
+        if(err){
+            throw new Error('Error recieving Feedbacks.')
+        } else{
+            res.send(doc);
+        } } )}
+    catch(err){
+        res.send({Error : err.message})
+    }  
+}
+  
+exports.viewAllFeed = async(req, res) => {
+    await entityDb.findOne( {Feedbacks: {$elemMatch: {'_id': req.body.signature, 'status': 'Active' }}}, (err, data) => {
+        if(err) { 
+            res.send(err) }
+        else{
+            res.send(data);
+        }    
+    })
+}
 
-exports.viewAllFeed = (req,res) => {
-    try{
-        entityDb.find( { '_id': req.params.id , 'Feedbacks.status' : 'Active' } ).exec( (err,docs) => {
-            res.json( {docs} );
-        });  
-    }
-    catch(err) {
-        res.send({ message: err.message})
-    }
-  }  
-
-exports.approveFeed = async(req,res) => {
-    let userExist = await userDb.find( { _id: req.body.id } ).exec();
-    if(userExist) { 
-        if(userExist[0].power === 'Admin'){ 
+exports.approveFeed = async(req, res) => {
             try{
-                await entityDb.findOneAndUpdate( { '_id': req.params.id, 'Feedbacks._id': req.params.signature },
+                await entityDb.findOneAndUpdate( { '_id': req.body.id, 'Feedbacks._id': req.body.signature },
                 { $set : { 'Feedbacks.$.status': "Active" } } ).exec();
                 res.send( { message:'Approved Feedback.' } )
             } 
-            catch(err){
-                res.send( { message: err.message } )
+            catch(err) {
+                res.send( { Error: err.message } )
             } 
-        } else {
-            res.send( {  message : 'Users cannot Update Feedback.' } )
         }
-    }
-               
-} 
 
-
-exports.deleteFeedback = async (req,res) => {
+exports.deleteFeedback = async (req, res) => {
     try{
-        await entityDb.findOneAndUpdate( { '_id':req.params.id, 'Feedbacks._id' : req.params.signature },
-        { $pull : { Feedbacks: { _id : req.params.signature }  } } ).exec();
+        await entityDb.findOneAndUpdate( { '_id':req.body.id, 'Feedbacks._id' : req.body.signature },
+        { $pull : { Feedbacks: { _id : req.body.signature }  } } ).exec();
         res.send( { message:'Deleted Successfully.' });
     }
     catch(err){
@@ -196,8 +219,18 @@ exports.deleteFeedback = async (req,res) => {
     }        
 } 
 
-
 exports.filterByCategory = (req,res) => {
-   entityDb.find( {Category:req.params.m_category} ).exec();
+    try{
+        entityDb.find( {Category: req.params.mCategory }, (err, docs) => {
+            if(err){
+                throw new Error('Error Getting Documents.')
+            }else{
+                res.send(docs);
+            }
+        }) 
+    }
+    catch(err){
+        res.send( {Error:err.message} )
+    }
 }
 

@@ -8,7 +8,7 @@ const schema  = {
             .required(),
 
         power : joi.string()
-            .valid("Admin","User"),
+                    .valid("Admin","User"),
         
         email : joi.string()
                     .email()
@@ -25,6 +25,7 @@ const schema  = {
         email: joi.string()
                     .email()
                     .min(6)
+                    .required()
                     .max(124),
 
         password: joi.string()

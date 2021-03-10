@@ -10,7 +10,7 @@ const schema  = {
         category : joi.string()
             .valid("Person","Technology"),
 
-        Feedbacks : joi.array().items({
+        feedbacks : joi.array().items({
             Feed : joi.string(),
             by: joi.string(),
             status: joi.string()

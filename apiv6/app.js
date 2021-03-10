@@ -10,8 +10,8 @@ const connectDb = require('./server/database/connection')
 app.use(bodyparser.json());
 
 //setting up the environment
-const env =  (process.env.NODE_ENV)? process.env.NODE_ENV: 'development';
-const PORT = (process.env.NODE_ENV === 'development')?3000:5000;
+const env =  (process.env.NODE_ENV) ? process.env.NODE_ENV : 'development';
+const PORT = (process.env.NODE_ENV === 'development') ? 3000 : 5000 ;
                 /* WE CAN CHANGE DIFFERENT DATABASES AND TOKENS BASED ON ENVIRONMENT */
 //Redirect to routes
 app.use('/', router);
