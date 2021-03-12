@@ -4,7 +4,9 @@ const PORT = process.env.PORT;
 const db= require('./config/database')
 const userRoutes = require('./routes/userRoutes');
 const foodRoutes = require('./routes/foodRoutes');
+const login = require('./routes/login')
 
+app.use(express.json());
 //Test DB
  db.authenticate()
     .then(() => {
@@ -18,8 +20,9 @@ const foodRoutes = require('./routes/foodRoutes');
 //API Routes
 app.use('/user', userRoutes);
 app.use('/food', foodRoutes);
+app.use('/login', login);
 
 
-app.listen(3000, () => {
+app.listen('3000', () => {
     console.log(`Server started.`)
 }) 
