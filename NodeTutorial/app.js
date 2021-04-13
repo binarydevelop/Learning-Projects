@@ -1,8 +1,10 @@
-const http =  require('http');
-const fs= require('fs');
+const express= require('express');
+const app = express();
+const router = require('./routes/router')
 
-const server = http.createServer((req, res) => {
- const readStream=  fs.createReadStream('EXAMPLE.txt', 'utf8');
-  res.writeHead(200, 'Connected', {'content-type' : 'text/html'});
-  readStream.pipe(res);
-}).listen(3000);
+app.use('/router',router)
+
+
+app.listen(3000, () => {
+  console.log('Server is Running.')
+});
