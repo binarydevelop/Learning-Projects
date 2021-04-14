@@ -1,0 +1,138 @@
+Pooling
+If your application is using the database frequently, using a single client connection to the database will likely slow down the application when you have many user requests. The easiest and most convenient way to address that problem is to use a connection pool.
+
+Usually, when a new client connects to the database, the process of establishing a connection and authenticating takes around 20-30 milliseconds. This is significant when you're running more queries leading to seconds of delay, which will likely end up being an unsatisfactory end-user experience.
+
+Also, the PostgreSQL server can only handle a limited number of clients at a given time which will depend on your server memory. So if 100 queries are going on in a second - this limitation might crash your server.
+
+Additionally, the client can process only one request at a time for a single connection which further slows things down.
+
+In a situation like this, you can use the pg-pool module to solve that.
+
+Creating a Pool
+First import the Pool Class from the pg module:
+
+const { Pool } = require('pg');
+Then, let's create a new pool object:
+
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'testdb',
+    password: '1234abcd',
+    port: 5432,
+});
+If you do not configure the username, host, and other properties, you'd have to define environment variables for these in a configuration file. It's pretty much the same as when configuring a single client.
+
+Next, let's define an error handler for the pool. If there are any errors throwing from the pool, the callback in this event will be fired:
+
+pool.on('error', (err, client) => {
+    console.error('Error:', err);
+});
+This covers us in case of a network error.
+
+Then, using the pool object, we connect to the database and use a client in that pool to execute a query:
+
+const query = `
+SELECT *
+FROM users
+`;
+
+pool.connect((err, client, done) => {
+    if (err) throw err;
+    client.query(query, (err, res) => {
+        done();
+        if (err) {
+            console.log(err.stack);
+        } else {
+            for (let row of res.rows) {
+                console.log(row);
+            }
+        }
+    });
+});
+This should yield:
+
+{
+  email: 'johndoe@gmail.com',
+  firstname: 'john',
+  lastname: 'doe',
+  age: 21
+}
+{
+  email: 'anna@gmail.com',
+  firstname: 'anna',
+  lastname: 'dias',
+  age: 35
+}
+Again, it makes more sense to use promises in this case:
+
+pool.connect()
+    .then((client) => {
+        client.query(query)
+            .then(res => {
+                for (let row of res.rows) {
+                    console.log(row);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    })
+    .catch(err => {
+        console.error(err);
+    });
+Or even the async/await syntax:
+
+(async () => {
+    try {
+        const client = await pool.connect();
+        const res = await client.query(query);
+
+        for (let row of res.rows) {
+            console.log(row);
+        }
+    } catch (err) {
+        console.error(err);
+    }
+})();
+Using the Cursor to Read Large Queries
+Usually, the data received from a query is loaded straight into the memory. The larger the data set, the higher the memory usage will be.
+
+So when you are trying to query a large data set that might contain tends of thousands of records - it's highly inefficient to load it all in the memory and oftentimes, it's plain impossible. A cursor can help you in a situation like this by retrieving a limited number of records at a time.
+
+In a sense, using a cursor is similar to streaming data since you'll access it sequentially in smaller blocks. In order to use the cursor, we have to install the pg-cursor module first:
+
+$ npm install --save pg pg-cursor
+We'll be passing a new Cursor to the query() function. The cursor won't actually retrieve any information until we specify the limit using the read() method:
+
+const { Pool } = require('pg');
+const Cursor = require('pg-cursor');
+
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'testdb',
+    password: '1234abcd',
+    port: 5432,
+});
+
+(async () => {
+    const client = await pool.connect();
+    const query = 'SELECT * FROM users';
+
+    const cursor = await client.query(new Cursor(query));
+
+    cursor.read(1, (err, rows) => {
+        console.log('We got the first row set');
+        console.log(rows);
+
+        cursor.read(1, (err, rows) => {
+            console.log('This is the next row set');
+            console.log(rows);
+        });
+    });
+})();
+The cursor's read() method lets us define how many rows we want to retrieve from the current cursor instance. In this example for simplicity, we have limited the rows for one record. Then we have read another set of rows after that.
+
+If you've reached the end of the rows in the database, the rows array will be of length 0.
