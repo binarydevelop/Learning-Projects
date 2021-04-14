@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const postSchema= mongoose.Schema({
-    title: { //make it required
+
+    title: { 
       type:  String,
       required :true
     },
-    description : { //make it required
+    description : { 
         type:  String,
         required :true
       },
@@ -15,4 +16,4 @@ const postSchema= mongoose.Schema({
             }
 })
 
-module.exports= mongoose.model('posts',postSchema);
+module.exports= mongoose.model('posts', postSchema);

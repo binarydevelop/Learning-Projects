@@ -1,27 +1,13 @@
 const express = require('express');
+const { db } = require('../models/POSTS');
 const router = express.Router();
-
+const controller = require('../controller/controller')
 //Import MODEL
 const Post = require('../models/POSTS');
-
  
-router.get('/',(req,res)=>{
-    const all_posts= Post.find();
-    res.json(all_posts);
-})
-router.post('/specific',(req,res)=>{
-   const new_post = new Post({
-       title : req.body.title,
-       description : req.body.description
-   })
-   new_post.save() 
-   .then(data => {
-       res.json(data);
-   })
-   .catch(err =>{
-       res.send(err);
-   })
-});
-
+router.get('/', controller.getAll);
+router.post('/create', controller.createPost);
+router.put('/update/:title', controller.updatePost);
+router.delete('\delete\:title', controller.deletePost);
 
 module.exports = router;
