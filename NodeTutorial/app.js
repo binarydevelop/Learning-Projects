@@ -1,8 +1,9 @@
 const express= require('express');
 const app = express();
 const router = require('./routes/router')
+const {logger} = require('./utils/middleware')
 
-app.use('/api', router)
+app.use('/api', logger, router)
 
 
 app.listen(3000, () => {
