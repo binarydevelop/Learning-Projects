@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, ValidationPipe } from '@nestjs/common';
 import { get } from 'node:http';
-import { addUser } from './dto/addUser.dto';
+import { addUserDto } from './dto/addUser.dto';
 import { user } from './interface/user.interface';
 import { UsersService } from './users.service';
 
@@ -17,8 +17,9 @@ export class UsersController {
         return this.userService.getUser(name);
     }
 
+   // age will come as number due to transform: true in DTO
     @Post('add')
-    async addUser(@Body()addUserDto: addUser ): Promise<user> {
+    async addUser(@Body(new ValidationPipe( {disableErrorMessages: false , transform: true} )) addUserDto: addUserDto ): Promise<user> {
         return this.userService.addUser(addUserDto)
     }
 
