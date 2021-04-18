@@ -4,7 +4,7 @@ import { user } from './interface/user.interface';
 @Injectable()
 export class UsersService {
 
-    private users: user[];
+    private users: user[] = [];
 
     async getUsers(): Promise<user[]> {
         return await this.users;
@@ -14,11 +14,11 @@ export class UsersService {
         return  this.users.filter(user => user.name === name)[0];
     }
 
-    async addUser(name: string, age: number, status: string): Promise<user> {
+    async addUser(addUserDto): Promise<user> {
         const newUser = {
-            name: name, 
-            age: age,
-            status: status
+            name: addUserDto.name, 
+            age: addUserDto.age,
+            status: addUserDto.status
         }
         this.users.push(newUser);
         return newUser;
