@@ -17,8 +17,9 @@ export class UsersController {
         return this.userService.getUser(name);
     }
 
+   // age will come as number due to transform: true in DTO
     @Post('add')
-    async addUser(@Body(new ValidationPipe( {disableErrorMessages: false} )) addUserDto: addUserDto ): Promise<user> {
+    async addUser(@Body(new ValidationPipe( {disableErrorMessages: false , transform: true} )) addUserDto: addUserDto ): Promise<user> {
         return this.userService.addUser(addUserDto)
     }
 
