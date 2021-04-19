@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, Request, RequestMethod } from '@nestjs/common';
+import { loggerMiddleware } from 'src/common/middleware/logger.middleware';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -6,4 +7,10 @@ import { UsersService } from './users.service';
   controllers: [UsersController],
   providers: [UsersService]
 })
-export class UsersModule {}
+export class UsersModule implements NestModule{
+  configure(consumer: MiddlewareConsumer){
+    consumer
+      .apply(loggerMiddleware)
+      .forRoutes({path: 'users' , method: RequestMethod.ALL})
+  }
+}
