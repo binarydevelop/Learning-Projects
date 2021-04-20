@@ -1,4 +1,5 @@
-import { Catch, Injectable, Logger } from '@nestjs/common';
+import { Catch, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { addTaskDto } from './dto/addTask.dto';
 import { Task } from './interface/task.interface';
 
 @Injectable()
@@ -26,11 +27,11 @@ export class TasksService {
         }
         catch(err){
             this.logger.log('Failed Getting Task');
-            return ({Error: `Failed Getting Task with id: ${id}`, status: 500})
+            return new HttpException({error: err.message}, HttpStatus.AMBIGUOUS)
         }
     }
 
-    async addTask(description: string){
+    async addTask(description){
         try{
             const newTask = {
                 id : Math.ceil(Math.random()* 100 + 25),

@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Req, Res, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Req, Res, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import { logPipe } from 'src/common/pipes/validation.pipe';
 import { addTaskDto } from './dto/addTask.dto';
 import { TasksService } from './tasks.service';
 
@@ -12,19 +13,20 @@ export class TasksController {
     }
 
     @Post('add')
-    @UsePipes(ValidationPipe)
+    @UsePipes(ValidationPipe, logPipe)
     async addTask(@Body() descriptionBody: addTaskDto){
-        const { description } = descriptionBody
-        return this.taskService.addTask(description);
+        const {description} = descriptionBody
+        console.log(description)
+        return await this.taskService.addTask(description);
     }
 
     @Get(':id')
-    async getTaskById(@Param('id',new ValidationPipe({transform: true})) id){
-        return this.taskService.getTaskById(id);
+    async getTaskById(@Param('id', ParseIntPipe) id:number){
+        return await this.taskService.getTaskById(id);
     }
 
     @Delete('/delete/:id')
-    async deleteTaskById(@Param('id') id: number){
+    async deleteTaskById(@Param('id', ParseIntPipe) id: number){
         return this.taskService.deleteTask(id);
     }
 }
